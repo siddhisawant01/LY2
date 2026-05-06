@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animal Game</title>
+
+<style>
+body { margin:0; font-family:Arial; background:#eef6f7; text-align:center; }
+
+#splash {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  background:white;
+}
+#splash img { width:180px; }
+
+#game { display:none; }
+
+#question { font-size:22px; margin:10px; }
+
+.options {
+  display:flex;
+  justify-content:space-around;
+  padding:10px;
+}
+
+.option {
+  width:30%;
+  background:white;
+  border-radius:12px;
+  padding:8px;
+  position:relative;
+}
+
+.option img {
+  width:100%;
+  height:180px;
+  object-fit:contain;
+}
+
+.correctMark, .wrongMark {
+  position:absolute;
+  top:5px;
+  right:5px;
+  font-size:28px;
+  display:none;
+}
+
+.correctMark { color:green; }
+.wrongMark { color:red; }
+
+.hint { border:3px solid orange; }
+
+#scoreScreen {
+  display:none;
+  font-size:24px;
+  padding-top:50px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- Splash -->
+<div id="splash">
+  <img src="/LY2/theme/animal-kingdom/assets/innovine-logo.png">
+</div>
+
+<!-- Game -->
+<div id="game">
+  <div id="question"></div>
+  <div class="options" id="options"></div>
+</div>
+
+<!-- Score -->
+<div id="scoreScreen"></div>
+
+<!-- Sounds -->
+<audio id="correctSound" src="/LY2/theme/animal-kingdom/assets/freesound_community-claps-44774.mp3"></audio>
+<audio id="wrongSound" src="/LY2/theme/animal-kingdom/assets/correct.mp3"></audio>
+
+<script>
+const basePath = "/LY2/theme/animal-kingdom/assets/";
+
+const questions = [
+{q:"Identify the elephant", correct:"elephant", options:["elephant","cat","monkey"]},
+{q:"Identify the lion", correct:"lion", options:["zebra","lion","giraffe"]},
+{q:"Identify the cow", correct:"cow", options:["rabbit","cow","pig"]},
+{q:"Identify the pig", correct:"pig", options:["sheep","pig","monkey"]},
+{q:"Identify the giraffe", correct:"giraffe", options:["giraffe","rabbit","lion"]},
+{q:"Identify the zebra", correct:"zebra", options:["sheep","zebra","rabbit"]},
+{q:"Identify the monkey", correct:"monkey", options:["lion","monkey","giraffe"]},
+{q:"Identify the sheep", correct:"sheep", options:["monkey","giraffe","sheep"]},
+{q:"Identify the cat", correct:"cat", options:["cat","zebra","cow"]},
+{q:"Identify the rabbit", correct:"rabbit", options:["giraffe","lion","rabbit"]}
+];
+
+let current=0, score=0, wrongAttempts=0;
+
+function shuffle(arr){ return arr.sort(()=>Math.random()-0.5); }
+
+function loadQuestion(){
+  wrongAttempts=0;
+  let q=questions[current];
+
+  document.getElementById("question").innerText=q.q;
+  let optionsDiv=document.getElementById("options");
+  optionsDiv.innerHTML="";
+
+  shuffle([...q.options]).forEach(opt=>{
+    let div=document.createElement("div");
+    div.className="option";
+
+    div.innerHTML=`
+      <span class="correctMark">✔</span>
+      <span class="wrongMark">✖</span>
+      <img src="${basePath + opt}.png">
+      <p>${opt}</p>
+    `;
+
+    div.onclick=()=>checkAnswer(opt,div);
+    optionsDiv.appendChild(div);
+  });
+}
+
+function checkAnswer(selected,el){
+  let correct=questions[current].correct;
+
+  if(selected===correct){
+    el.querySelector(".correctMark").style.display="block";
+    playSound("correctSound");
+
+    score++; current++;
+
+    setTimeout(()=>{
+      current<questions.length ? loadQuestion() : showScore();
+    },800);
+
+  }else{
+    el.querySelector(".wrongMark").style.display="block";
+    playSound("wrongSound");
+
+    wrongAttempts++;
+    if(wrongAttempts>=2) showHint(correct);
+  }
+}
+
+function showHint(correct){
+  document.querySelectorAll(".option").forEach(o=>{
+    if(o.innerText.toLowerCase()===correct){
+      o.classList.add("hint");
+    }
+  });
+}
+
+function showScore(){
+  document.getElementById("game").style.display="none";
+  let s=document.getElementById("scoreScreen");
+  s.style.display="block";
+  s.innerHTML=`🎉 Score: ${score}/10 <br><br>You have done a great job!`;
+}
+
+function playSound(id){
+  let a=document.getElementById(id);
+  a.currentTime=0;
+  a.play().catch(()=>{});
+}
+
+setTimeout(()=>{
+  document.getElementById("splash").style.display="none";
+  document.getElementById("game").style.display="block";
+  loadQuestion();
+},5000);
+</script>
+
+</body>
+</html>
