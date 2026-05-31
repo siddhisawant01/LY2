@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Tall and Short Game</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Arial Rounded MT Bold",Arial,sans-serif;
+}
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+body{
+background:#ffffff;
+}
+
+.slide{
+position:absolute;
+inset:0;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+padding:10px;
+}
+
+.slide.active{
+display:flex;
+}
+
+/* -------------------- Splash -------------------- */
+
+#splash{
+background:white;
+}
+
+.logo{
+max-width:70%;
+max-height:50%;
+object-fit:contain;
+}
+
+/* -------------------- Game Slides -------------------- */
+
+.game-slide{
+background:
+linear-gradient(135deg,#ff6b9d,#ffd166,#7bdff2,#95f9c3);
+background-size:400% 400%;
+animation:bgMove 10s ease infinite;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.pattern{
+position:absolute;
+inset:0;
+background-image:
+radial-gradient(circle at 20% 20%, rgba(255,255,255,.35) 8px, transparent 9px),
+radial-gradient(circle at 80% 30%, rgba(255,255,255,.35) 8px, transparent 9px),
+radial-gradient(circle at 30% 80%, rgba(255,255,255,.35) 8px, transparent 9px),
+radial-gradient(circle at 70% 70%, rgba(255,255,255,.35) 8px, transparent 9px);
+pointer-events:none;
+}
+
+.instruction{
+position:relative;
+z-index:2;
+font-size:clamp(20px,3vw,34px);
+font-weight:bold;
+text-align:center;
+background:white;
+padding:12px 18px;
+border-radius:20px;
+margin-bottom:15px;
+box-shadow:0 4px 12px rgba(0,0,0,.2);
+}
+
+.audio-btn{
+border:none;
+background:#ff8c42;
+color:white;
+font-size:18px;
+padding:10px 20px;
+border-radius:40px;
+cursor:pointer;
+margin-bottom:15px;
+font-weight:bold;
+}
+
+.options{
+position:relative;
+z-index:2;
+width:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:30px;
+flex-wrap:nowrap;
+}
+
+.card{
+width:min(38vw,280px);
+height:min(42vh,320px);
+background:white;
+border-radius:30px;
+padding:10px;
+cursor:pointer;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+border:8px solid;
+border-image:linear-gradient(45deg,#ff4d6d,#ffbe0b,#06d6a0,#118ab2) 1;
+box-shadow:0 10px 20px rgba(0,0,0,.2);
+position:relative;
+transition:.2s;
+}
+
+.card:active{
+transform:scale(.97);
+}
+
+.card img{
+width:100%;
+height:85%;
+object-fit:contain;
+}
+
+.label{
+font-size:24px;
+font-weight:bold;
+text-transform:lowercase;
+margin-top:5px;
+color:#444;
+}
+
+.feedback{
+position:absolute;
+font-size:110px;
+display:none;
+z-index:100;
+}
+
+.correct{
+color:#00c853;
+}
+
+.wrong{
+color:#ff1744;
+}
+
+/* -------------------- Final Slide -------------------- */
+
+#finalSlide{
+background:linear-gradient(135deg,#ff9a9e,#fad0c4,#a18cd1,#fbc2eb);
+}
+
+.final-text{
+font-size:clamp(40px,6vw,80px);
+font-weight:bold;
+color:white;
+text-shadow:3px 3px 8px rgba(0,0,0,.3);
+}
+
+.confetti{
+position:absolute;
+width:12px;
+height:12px;
+animation:fall linear forwards;
+}
+
+@keyframes fall{
+to{
+transform:translateY(110vh) rotate(720deg);
+opacity:0;
+}
+}
+
+@media(max-width:768px){
+
+.options{
+gap:12px;
+}
+
+.card{
+width:45vw;
+height:42vh;
+}
+
+.label{
+font-size:18px;
+}
+
+.feedback{
+font-size:80px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Slide 1 -->
+
+<div class="slide active" id="splash">
+<img src="assets/innovine-logo.png" class="logo">
+</div>
+
+<!-- Slide 2 -->
+
+<div class="slide game-slide" id="slide2">
+
+<div class="pattern"></div>
+
+<div class="instruction">
+Identify the tall object
+</div>
+
+<button class="audio-btn" onclick="speak('Identify the tall object')">
+🔊 Listen
+</button>
+
+<div class="options">
+
+<div class="card" onclick="checkAnswer(this,true,3)">
+<img src="assets/giraffe.png">
+<div class="label">giraffe</div>
+</div>
+
+<div class="card" onclick="checkAnswer(this,false,3)">
+<img src="assets/monkey.png">
+<div class="label">monkey</div>
+</div>
+
+</div>
+
+<div class="feedback correct">✔</div>
+<div class="feedback wrong">✖</div>
+
+</div>
+
+<!-- Slide 3 -->
+
+<div class="slide game-slide" id="slide3">
+
+<div class="pattern"></div>
+
+<div class="instruction">
+Identify the small object
+</div>
+
+<button class="audio-btn" onclick="speak('Identify the small object')">
+🔊 Listen
+</button>
+
+<div class="options">
+
+<div class="card" onclick="checkAnswer(this,false,4)">
+<img src="assets/coconuttree.png">
+<div class="label">coconut tree</div>
+</div>
+
+<div class="card" onclick="checkAnswer(this,true,4)">
+<img src="assets/plant.png">
+<div class="label">plant</div>
+</div>
+
+</div>
+
+<div class="feedback correct">✔</div>
+<div class="feedback wrong">✖</div>
+
+</div>
+
+<!-- Slide 4 -->
+
+<div class="slide game-slide" id="slide4">
+
+<div class="pattern"></div>
+
+<div class="instruction">
+Identify the tall object
+</div>
+
+<button class="audio-btn" onclick="speak('Identify the tall object')">
+🔊 Listen
+</button>
+
+<div class="options">
+
+<div class="card" onclick="checkAnswer(this,true,5)">
+<img src="assets/woman.png">
+<div class="label">woman</div>
+</div>
+
+<div class="card" onclick="checkAnswer(this,false,5)">
+<img src="assets/baby.png">
+<div class="label">baby</div>
+</div>
+
+</div>
+
+<div class="feedback correct">✔</div>
+<div class="feedback wrong">✖</div>
+
+</div>
+
+<!-- Slide 5 -->
+
+<div class="slide game-slide" id="slide5">
+
+<div class="pattern"></div>
+
+<div class="instruction">
+Identify the small object
+</div>
+
+<button class="audio-btn" onclick="speak('Identify the small object')">
+🔊 Listen
+</button>
+
+<div class="options">
+
+<div class="card" onclick="checkAnswer(this,false,6)">
+<img src="assets/tower.png">
+<div class="label">tower</div>
+</div>
+
+<div class="card" onclick="checkAnswer(this,true,6)">
+<img src="assets/house.png">
+<div class="label">house</div>
+</div>
+
+</div>
+
+<div class="feedback correct">✔</div>
+<div class="feedback wrong">✖</div>
+
+</div>
+
+<!-- Slide 6 -->
+
+<div class="slide" id="finalSlide">
+<div class="final-text">
+🎉 Fantastic! 🎉
+</div>
+</div>
+
+<audio id="wrongSound" src="assets/wrong.mp3"></audio>
+
+<script>
+
+setTimeout(()=>{
+showSlide(2);
+},3000);
+
+function showSlide(number){
+
+document.querySelectorAll('.slide').forEach(slide=>{
+slide.classList.remove('active');
+});
+
+document.getElementById(
+number===6 ? 'finalSlide' : 'slide'+number
+).classList.add('active');
+
+if(number===6){
+createConfetti();
+}
+
+}
+
+function speak(text){
+
+if('speechSynthesis' in window){
+
+speechSynthesis.cancel();
+
+let msg=new SpeechSynthesisUtterance(text);
+
+msg.rate=0.85;
+msg.pitch=1.1;
+msg.volume=1;
+
+speechSynthesis.speak(msg);
+
+}
+
+}
+
+function checkAnswer(card,isCorrect,nextSlide){
+
+let slide=card.closest('.slide');
+
+let tick=slide.querySelector('.correct');
+let cross=slide.querySelector('.wrong');
+
+if(isCorrect){
+
+tick.style.display='block';
+
+setTimeout(()=>{
+tick.style.display='none';
+showSlide(nextSlide);
+},1200);
+
+}
+else{
+
+cross.style.display='block';
+
+document.getElementById('wrongSound').play();
+
+setTimeout(()=>{
+cross.style.display='none';
+},1000);
+
+}
+
+}
+
+function createConfetti(){
+
+for(let i=0;i<120;i++){
+
+let conf=document.createElement('div');
+
+conf.className='confetti';
+
+conf.style.left=Math.random()*100+'vw';
+
+conf.style.top='-20px';
+
+conf.style.background=
+`hsl(${Math.random()*360},100%,50%)`;
+
+conf.style.animationDuration=
+(2+Math.random()*4)+'s';
+
+document.getElementById('finalSlide')
+.appendChild(conf);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
