@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Aa to Ee Matching Game</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Arial Rounded MT Bold', Arial, sans-serif;
+-webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+}
+
+body{
+background:#fff7fb;
+}
+
+.slide{
+position:absolute;
+width:100%;
+height:100%;
+top:0;
+left:0;
+display:none;
+}
+
+.slide.active{
+display:flex;
+}
+
+/* ---------------- SLIDE 1 ---------------- */
+
+#slide1{
+background:white;
+justify-content:center;
+align-items:center;
+}
+
+.logo{
+width:70%;
+max-width:350px;
+object-fit:contain;
+animation:zoomIn 1s ease;
+}
+
+@keyframes zoomIn{
+from{
+transform:scale(.5);
+opacity:0;
+}
+to{
+transform:scale(1);
+opacity:1;
+}
+}
+
+/* ---------------- SLIDE 2 ---------------- */
+
+#slide2{
+flex-direction:column;
+align-items:center;
+padding:10px;
+background:
+linear-gradient(rgba(255,245,250,.88),rgba(255,245,250,.88)),
+radial-gradient(circle at 10% 10%,#ff9ecf 0%,transparent 15%),
+radial-gradient(circle at 90% 20%,#ffd166 0%,transparent 15%),
+radial-gradient(circle at 20% 90%,#7bdff2 0%,transparent 15%),
+radial-gradient(circle at 80% 85%,#b8f2a8 0%,transparent 15%);
+}
+
+.title{
+font-size:clamp(18px,4vw,30px);
+font-weight:900;
+text-align:center;
+color:#102542;
+margin-top:5px;
+margin-bottom:10px;
+}
+
+.game-area{
+width:100%;
+max-width:900px;
+height:calc(100% - 70px);
+display:flex;
+justify-content:space-between;
+position:relative;
+}
+
+.column{
+width:42%;
+display:flex;
+flex-direction:column;
+justify-content:space-evenly;
+}
+
+.card{
+height:16%;
+background:white;
+border-radius:22px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:8px 12px;
+font-size:clamp(28px,5vw,50px);
+font-weight:bold;
+cursor:pointer;
+position:relative;
+z-index:2;
+box-shadow:0 4px 10px rgba(0,0,0,.15);
+transition:.2s;
+}
+
+.card.selected{
+transform:scale(1.05);
+}
+
+.left .card:nth-child(1){border:5px solid #ff6b6b;}
+.left .card:nth-child(2){border:5px solid #ff9f1c;}
+.left .card:nth-child(3){border:5px solid #2ec4b6;}
+.left .card:nth-child(4){border:5px solid #9b5de5;}
+.left .card:nth-child(5){border:5px solid #00bbf9;}
+
+.right .card:nth-child(1){border:5px solid #f15bb5;}
+.right .card:nth-child(2){border:5px solid #43aa8b;}
+.right .card:nth-child(3){border:5px solid #577590;}
+.right .card:nth-child(4){border:5px solid #f3722c;}
+.right .card:nth-child(5){border:5px solid #90be6d;}
+
+.emoji{
+font-size:clamp(24px,5vw,46px);
+}
+
+svg{
+position:absolute;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:1;
+}
+
+.tick,
+.cross{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:100px;
+font-weight:bold;
+display:none;
+z-index:999;
+}
+
+.tick{
+color:#00c853;
+}
+
+.cross{
+color:#ff1744;
+}
+
+.show{
+display:block;
+animation:pop .7s ease;
+}
+
+@keyframes pop{
+0%{
+transform:translate(-50%,-50%) scale(.3);
+opacity:0;
+}
+100%{
+transform:translate(-50%,-50%) scale(1);
+opacity:1;
+}
+}
+
+/* ---------------- SLIDE 3 ---------------- */
+
+#slide3{
+background:linear-gradient(135deg,#ffd6e8,#fff4c2,#d4f8d4);
+justify-content:center;
+align-items:center;
+flex-direction:column;
+}
+
+.goodjob{
+font-size:clamp(40px,8vw,90px);
+font-weight:900;
+color:#ff4081;
+text-shadow:3px 3px white;
+animation:bounce 1s infinite;
+}
+
+@keyframes bounce{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-15px);}
+}
+
+.confetti{
+position:absolute;
+width:10px;
+height:18px;
+top:-20px;
+animation:fall linear infinite;
+}
+
+@keyframes fall{
+to{
+transform:translateY(120vh) rotate(720deg);
+}
+}
+
+@media(max-width:700px){
+
+.card{
+font-size:38px;
+padding:6px 10px;
+}
+
+.emoji{
+font-size:34px;
+}
+
+.title{
+font-size:22px;
+}
+
+}
+</style>
+</head>
+<body>
+
+<!-- Slide 1 -->
+
+<div id="slide1" class="slide active">
+<img src="assets/innovine-logo.png" class="logo">
+</div>
+
+<!-- Slide 2 -->
+
+<div id="slide2" class="slide">
+
+<div class="title">
+Match the Uppercase letter to lowercase letters.
+</div>
+
+<div class="game-area">
+
+<svg id="lines"></svg>
+
+<div class="column left">
+
+<div class="card upper" data-letter="e">
+<span class="emoji">🥚</span>
+<span>E</span>
+</div>
+
+<div class="card upper" data-letter="a">
+<span class="emoji">🍎</span>
+<span>A</span>
+</div>
+
+<div class="card upper" data-letter="d">
+<span class="emoji">🥁</span>
+<span>D</span>
+</div>
+
+<div class="card upper" data-letter="b">
+<span class="emoji">⚽</span>
+<span>B</span>
+</div>
+
+<div class="card upper" data-letter="c">
+<span class="emoji">🐱</span>
+<span>C</span>
+</div>
+
+</div>
+
+<div class="column right">
+
+<div class="card lower" data-letter="a">
+<span>a</span>
+<span class="emoji">🍎</span>
+</div>
+
+<div class="card lower" data-letter="c">
+<span>c</span>
+<span class="emoji">🐱</span>
+</div>
+
+<div class="card lower" data-letter="e">
+<span>e</span>
+<span class="emoji">🥚</span>
+</div>
+
+<div class="card lower" data-letter="d">
+<span>d</span>
+<span class="emoji">🥁</span>
+</div>
+
+<div class="card lower" data-letter="b">
+<span>b</span>
+<span class="emoji">⚽</span>
+</div>
+
+</div>
+
+</div>
+
+<div class="tick" id="tick">✔</div>
+<div class="cross" id="cross">✖</div>
+
+<audio id="wrongSound" preload="auto">
+<source src="assets/wrong.mp3" type="audio/mpeg">
+</audio>
+
+</div>
+
+<!-- Slide 3 -->
+
+<div id="slide3" class="slide">
+<div class="goodjob">🎉 Good Job! 🎉</div>
+</div>
+
+<script>
+
+setTimeout(()=>{
+document.getElementById("slide1").classList.remove("active");
+document.getElementById("slide2").classList.add("active");
+},3000);
+
+let selectedUpper=null;
+let matches=0;
+
+const uppers=document.querySelectorAll(".upper");
+const lowers=document.querySelectorAll(".lower");
+
+uppers.forEach(card=>{
+
+card.addEventListener("click",()=>{
+
+document.querySelectorAll(".upper").forEach(c=>c.classList.remove("selected"));
+
+selectedUpper=card;
+card.classList.add("selected");
+
+});
+
+});
+
+lowers.forEach(card=>{
+
+card.addEventListener("click",()=>{
+
+if(!selectedUpper) return;
+
+const upperLetter=selectedUpper.dataset.letter;
+const lowerLetter=card.dataset.letter;
+
+if(upperLetter===lowerLetter){
+
+drawLine(selectedUpper,card);
+
+showTick();
+
+selectedUpper.style.pointerEvents="none";
+card.style.pointerEvents="none";
+
+selectedUpper.style.opacity=".6";
+card.style.opacity=".6";
+
+matches++;
+
+if(matches===5){
+
+setTimeout(()=>{
+document.getElementById("slide2").classList.remove("active");
+document.getElementById("slide3").classList.add("active");
+createConfetti();
+},1000);
+
+}
+
+}else{
+
+showCross();
+
+const wrong=document.getElementById("wrongSound");
+wrong.currentTime=0;
+wrong.play();
+
+}
+
+selectedUpper.classList.remove("selected");
+selectedUpper=null;
+
+});
+
+});
+
+function drawLine(el1,el2){
+
+const svg=document.getElementById("lines");
+
+const r1=el1.getBoundingClientRect();
+const r2=el2.getBoundingClientRect();
+
+const parent=document.querySelector(".game-area").getBoundingClientRect();
+
+const x1=r1.right-parent.left;
+const y1=r1.top+r1.height/2-parent.top;
+
+const x2=r2.left-parent.left;
+const y2=r2.top+r2.height/2-parent.top;
+
+const line=document.createElementNS(
+"http://www.w3.org/2000/svg",
+"line"
+);
+
+line.setAttribute("x1",x1);
+line.setAttribute("y1",y1);
+line.setAttribute("x2",x2);
+line.setAttribute("y2",y2);
+line.setAttribute("stroke","#00c853");
+line.setAttribute("stroke-width","6");
+line.setAttribute("stroke-linecap","round");
+
+svg.appendChild(line);
+
+}
+
+function showTick(){
+
+const tick=document.getElementById("tick");
+
+tick.classList.add("show");
+
+setTimeout(()=>{
+tick.classList.remove("show");
+},700);
+
+}
+
+function showCross(){
+
+const cross=document.getElementById("cross");
+
+cross.classList.add("show");
+
+setTimeout(()=>{
+cross.classList.remove("show");
+},700);
+
+}
+
+function createConfetti(){
+
+for(let i=0;i<120;i++){
+
+const c=document.createElement("div");
+
+c.className="confetti";
+
+c.style.left=Math.random()*100+"vw";
+
+c.style.background=
+`hsl(${Math.random()*360},100%,60%)`;
+
+c.style.animationDuration=
+(3+Math.random()*3)+"s";
+
+document.getElementById("slide3").appendChild(c);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
