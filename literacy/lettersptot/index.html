@@ -132,12 +132,14 @@ transform:scale(1.15);
 background:#fff6bf;
 }
 
-svg{
+#lineSVG{
 position:absolute;
+top:0;
+left:0;
 width:100%;
 height:100%;
 pointer-events:none;
-z-index:2;
+z-index:3;
 }
 
 .correctLine{
@@ -299,6 +301,8 @@ boxes.forEach(box=>{
 
 box.addEventListener("click",()=>{
 
+if(box.classList.contains("matched")) return;
+
 const value=box.dataset.letter;
 
 if(value===value.toUpperCase()){
@@ -328,6 +332,9 @@ box.style.pointerEvents="none";
 
 selectedUpper.style.opacity=".6";
 box.style.opacity=".6";
+
+selectedUpper.classList.add("matched");
+box.classList.add("matched");
 
 matches++;
 
@@ -361,14 +368,16 @@ function drawLine(start,end){
 
 const svg=document.getElementById("lineSVG");
 
-const rect1=start.getBoundingClientRect();
-const rect2=end.getBoundingClientRect();
+const svgRect = svg.getBoundingClientRect();
 
-const x1=rect1.left+rect1.width/2;
-const y1=rect1.top+rect1.height/2;
+const startRect = start.getBoundingClientRect();
+const endRect = end.getBoundingClientRect();
 
-const x2=rect2.left+rect2.width/2;
-const y2=rect2.top+rect2.height/2;
+const x1 = startRect.right - svgRect.left;
+const y1 = startRect.top + startRect.height/2 - svgRect.top;
+
+const x2 = endRect.left - svgRect.left;
+const y2 = endRect.top + endRect.height/2 - svgRect.top;
 
 const line=document.createElementNS(
 "http://www.w3.org/2000/svg",
@@ -377,10 +386,13 @@ const line=document.createElementNS(
 
 line.setAttribute("x1",x1);
 line.setAttribute("y1",y1);
+
 line.setAttribute("x2",x2);
 line.setAttribute("y2",y2);
 
-line.setAttribute("class","correctLine");
+line.setAttribute("stroke","#00c853");
+line.setAttribute("stroke-width","8");
+line.setAttribute("stroke-linecap","round");
 
 svg.appendChild(line);
 
