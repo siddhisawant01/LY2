@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Match Uppercase to Lowercase</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
+body{
+overflow:hidden;
+width:100vw;
+height:100vh;
+}
+
+/* ===================== */
+/* Slide 1 */
+/* ===================== */
+
+#splash{
+position:absolute;
+width:100%;
+height:100%;
+background:white;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+#splash img{
+max-width:70%;
+max-height:70%;
+}
+
+/* ===================== */
+/* Slide 2 */
+/* ===================== */
+
+#gameScreen{
+display:none;
+width:100%;
+height:100%;
+background:url("assets/background.jpg");
+background-size:cover;
+background-position:center;
+position:relative;
+overflow:hidden;
+}
+
+.overlay{
+position:absolute;
+width:100%;
+height:100%;
+background:rgba(255,255,255,0.15);
+}
+
+.heading{
+text-align:center;
+font-size:clamp(20px,3vw,34px);
+font-weight:bold;
+padding:12px;
+color:#fff;
+text-shadow:2px 2px 4px black;
+}
+
+.gameArea{
+position:relative;
+height:85%;
+width:100%;
+display:flex;
+justify-content:space-evenly;
+align-items:center;
+}
+
+.column{
+display:flex;
+flex-direction:column;
+justify-content:space-evenly;
+height:90%;
+z-index:5;
+}
+
+.letterBox{
+width:min(18vw,110px);
+height:min(18vw,110px);
+min-width:70px;
+min-height:70px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:clamp(40px,5vw,60px);
+font-weight:bold;
+
+background:white;
+cursor:pointer;
+user-select:none;
+
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.25);
+transition:.2s;
+}
+
+.letterBox:hover{
+transform:scale(1.05);
+}
+
+.left1{border:8px solid #ff5f87;}
+.left2{border:8px solid #6bcB77;}
+.left3{border:8px solid #4d96ff;}
+.left4{border:8px solid #ffd93d;}
+.left5{border:8px solid #9d4edd;}
+
+.right1{border:8px solid #ff9f1c;}
+.right2{border:8px solid #06d6a0;}
+.right3{border:8px solid #ef476f;}
+.right4{border:8px solid #118ab2;}
+.right5{border:8px solid #8338ec;}
+
+.selected{
+transform:scale(1.15);
+background:#fff6bf;
+}
+
+svg{
+position:absolute;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:2;
+}
+
+.correctLine{
+stroke:#00c853;
+stroke-width:6;
+}
+
+.popup{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:120px;
+display:none;
+z-index:20;
+}
+
+.tick{
+color:green;
+}
+
+.cross{
+color:red;
+}
+
+/* ===================== */
+/* Slide 3 */
+/* ===================== */
+
+#successScreen{
+display:none;
+position:absolute;
+width:100%;
+height:100%;
+background:linear-gradient(
+45deg,
+#ff9a9e,
+#fad0c4,
+#ffd1ff,
+#c2ffd8
+);
+
+justify-content:center;
+align-items:center;
+flex-direction:column;
+text-align:center;
+}
+
+#successScreen h1{
+font-size:clamp(40px,8vw,90px);
+color:white;
+text-shadow:3px 3px 6px black;
+}
+
+#successScreen p{
+font-size:clamp(20px,4vw,40px);
+color:white;
+margin-top:10px;
+}
+
+.confetti{
+position:absolute;
+width:10px;
+height:10px;
+animation:fall linear infinite;
+}
+
+@keyframes fall{
+from{
+transform:translateY(-100vh) rotate(0deg);
+}
+to{
+transform:translateY(100vh) rotate(720deg);
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Slide 1 -->
+
+<div id="splash">
+<img src="assets/innovine-logo.png">
+</div>
+
+<!-- Slide 2 -->
+
+<div id="gameScreen">
+
+<div class="overlay"></div>
+
+<div class="heading">
+Match the Uppercase letter to lowercase letters.
+</div>
+
+<svg id="lineSVG"></svg>
+
+<div class="gameArea">
+
+<div class="column">
+
+<div class="letterBox left1" data-letter="P">P</div>
+<div class="letterBox left2" data-letter="Q">Q</div>
+<div class="letterBox left3" data-letter="R">R</div>
+<div class="letterBox left4" data-letter="S">S</div>
+<div class="letterBox left5" data-letter="T">T</div>
+
+</div>
+
+<div class="column">
+
+<div class="letterBox right1" data-letter="t">t</div>
+<div class="letterBox right2" data-letter="s">s</div>
+<div class="letterBox right3" data-letter="q">q</div>
+<div class="letterBox right4" data-letter="p">p</div>
+<div class="letterBox right5" data-letter="r">r</div>
+
+</div>
+
+</div>
+
+<div class="popup tick" id="tick">✔</div>
+<div class="popup cross" id="cross">✖</div>
+
+</div>
+
+<!-- Slide 3 -->
+
+<div id="successScreen">
+<h1>🎉 Good Job! 🎉</h1>
+<p>You matched all the letters correctly!</p>
+</div>
+
+<audio id="wrongSound" src="assets/wrong.mp3"></audio>
+
+<script>
+
+setTimeout(()=>{
+document.getElementById("splash").style.display="none";
+document.getElementById("gameScreen").style.display="block";
+},3000);
+
+const answers={
+P:"p",
+Q:"q",
+R:"r",
+S:"s",
+T:"t"
+};
+
+let selectedUpper=null;
+let matches=0;
+
+const boxes=document.querySelectorAll(".letterBox");
+
+boxes.forEach(box=>{
+
+box.addEventListener("click",()=>{
+
+const value=box.dataset.letter;
+
+if(value===value.toUpperCase()){
+
+document.querySelectorAll(".letterBox")
+.forEach(b=>b.classList.remove("selected"));
+
+box.classList.add("selected");
+selectedUpper=box;
+
+}
+else{
+
+if(!selectedUpper) return;
+
+const upper=selectedUpper.dataset.letter;
+const lower=value;
+
+if(answers[upper]===lower){
+
+drawLine(selectedUpper,box);
+
+showTick();
+
+selectedUpper.style.pointerEvents="none";
+box.style.pointerEvents="none";
+
+selectedUpper.style.opacity=".6";
+box.style.opacity=".6";
+
+matches++;
+
+if(matches===5){
+
+setTimeout(()=>{
+showSuccess();
+},1500);
+
+}
+
+}
+else{
+
+showCross();
+
+document.getElementById("wrongSound").play();
+
+}
+
+selectedUpper.classList.remove("selected");
+selectedUpper=null;
+
+}
+
+});
+
+});
+
+function drawLine(start,end){
+
+const svg=document.getElementById("lineSVG");
+
+const rect1=start.getBoundingClientRect();
+const rect2=end.getBoundingClientRect();
+
+const x1=rect1.left+rect1.width/2;
+const y1=rect1.top+rect1.height/2;
+
+const x2=rect2.left+rect2.width/2;
+const y2=rect2.top+rect2.height/2;
+
+const line=document.createElementNS(
+"http://www.w3.org/2000/svg",
+"line"
+);
+
+line.setAttribute("x1",x1);
+line.setAttribute("y1",y1);
+line.setAttribute("x2",x2);
+line.setAttribute("y2",y2);
+
+line.setAttribute("class","correctLine");
+
+svg.appendChild(line);
+
+}
+
+function showTick(){
+
+const tick=document.getElementById("tick");
+
+tick.style.display="block";
+
+setTimeout(()=>{
+tick.style.display="none";
+},800);
+
+}
+
+function showCross(){
+
+const cross=document.getElementById("cross");
+
+cross.style.display="block";
+
+setTimeout(()=>{
+cross.style.display="none";
+},800);
+
+}
+
+function showSuccess(){
+
+document.getElementById("gameScreen").style.display="none";
+
+const success=
+document.getElementById("successScreen");
+
+success.style.display="flex";
+
+for(let i=0;i<100;i++){
+
+let c=document.createElement("div");
+
+c.className="confetti";
+
+c.style.left=Math.random()*100+"%";
+c.style.top="-20px";
+
+c.style.background=
+`hsl(${Math.random()*360},100%,50%)`;
+
+c.style.animationDuration=
+(3+Math.random()*4)+"s";
+
+success.appendChild(c);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
