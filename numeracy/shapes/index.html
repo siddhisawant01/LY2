@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>Shapes Matching Game</title>
 
@@ -12,7 +13,7 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial, sans-serif;
 -webkit-tap-highlight-color:transparent;
 }
 
@@ -20,297 +21,373 @@ html,body{
 width:100%;
 height:100%;
 overflow:hidden;
-background:#fff;
+background:#f7f7f7;
 }
 
 .slide{
+position:absolute;
 width:100%;
 height:100%;
+top:0;
+left:0;
 display:none;
-position:relative;
 }
 
 .slide.active{
 display:flex;
 }
 
-/* SLIDE 1 */
+/* ---------------- SLIDE 1 ---------------- */
 
 #slide1{
+background:white;
 justify-content:center;
 align-items:center;
-background:white;
+flex-direction:column;
 }
 
-#logo{
-width:min(70vw,320px);
-max-height:50vh;
-object-fit:contain;
+#slide1 img{
+width:min(60vw,300px);
+max-width:300px;
 }
 
-.fade{
-animation:fadeIn 1s ease;
+.tapText{
+margin-top:20px;
+font-size:24px;
+font-weight:bold;
+color:#444;
+animation:blink 1s infinite;
 }
 
-@keyframes fadeIn{
-from{opacity:0}
-to{opacity:1}
+@keyframes blink{
+50%{opacity:.3;}
 }
 
-/* SLIDE 2 */
+/* ---------------- SLIDE 2 ---------------- */
 
 #slide2{
+background:#f3f3f3;
 flex-direction:column;
-background:#f9fbff;
+align-items:center;
 padding:10px;
+background-image:
+radial-gradient(#000 2px, transparent 2px),
+radial-gradient(#f9d423 3px, transparent 3px);
+background-size:120px 120px,180px 180px;
 }
 
 .instruction{
-text-align:center;
 font-size:clamp(16px,2vw,28px);
 font-weight:bold;
+text-align:center;
+margin-top:10px;
+margin-bottom:10px;
 color:#333;
-padding:10px;
 }
 
-.game-area{
-flex:1;
+.gameArea{
 position:relative;
+width:100%;
+height:calc(100% - 70px);
 display:flex;
 justify-content:center;
 align-items:center;
+}
+
+.columns{
+width:min(900px,95vw);
+display:flex;
+justify-content:center;
 gap:80px;
-max-width:900px;
-margin:auto;
-width:100%;
+position:relative;
 }
 
 .column{
-width:42%;
 display:flex;
 flex-direction:column;
-justify-content:space-evenly;
-height:100%;
+gap:15px;
 }
 
-.item{
-display:flex;
-align-items:center;
-gap:10px;
-position:relative;
-}
-
-.shape-card,
-.object-card{
-width:min(20vw,130px);
-height:min(20vw,130px);
-border-radius:18px;
+.card{
+width:min(24vw,160px);
+height:min(24vw,160px);
+max-width:160px;
+max-height:160px;
 background:white;
-display:flex;
-align-items:center;
-justify-content:center;
-cursor:pointer;
 border:5px solid;
+border-radius:18px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+cursor:pointer;
 box-shadow:0 4px 10px rgba(0,0,0,.15);
-position:relative;
 }
 
-.shape-card.selected{
-transform:scale(1.08);
+.shapeCard:nth-child(1){border-color:#ff6b6b;}
+.shapeCard:nth-child(2){border-color:#4ecdc4;}
+.shapeCard:nth-child(3){border-color:#f7b731;}
+.shapeCard:nth-child(4){border-color:#6c5ce7;}
+
+.objectCard:nth-child(1){border-color:#ff9ff3;}
+.objectCard:nth-child(2){border-color:#54a0ff;}
+.objectCard:nth-child(3){border-color:#1dd1a1;}
+.objectCard:nth-child(4){border-color:#f368e0;}
+
+.card img{
+width:70%;
+height:70%;
+object-fit:contain;
+pointer-events:none;
 }
 
 .label{
-font-size:clamp(12px,1.5vw,18px);
+margin-top:5px;
+font-size:18px;
 font-weight:bold;
+color:#333;
 text-transform:lowercase;
 }
 
-.shape-card img,
-.object-card img{
-max-width:80%;
-max-height:80%;
-object-fit:contain;
+.selected{
+transform:scale(1.08);
 }
 
-.circleBorder{border-color:#00bfff;}
-.squareBorder{border-color:#00cc66;}
-.triangleBorder{border-color:#ff3333;}
-.rectangleBorder{border-color:#ff9900;}
+.tick,
+.cross{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:120px;
+z-index:1000;
+display:none;
+pointer-events:none;
+}
 
-.obj1{border-color:#ff66cc;}
-.obj2{border-color:#66ccff;}
-.obj3{border-color:#ffcc00;}
-.obj4{border-color:#66cc66;}
+.tick{
+color:#2ecc71;
+}
 
-#lines{
+.cross{
+color:#e74c3c;
+}
+
+svg{
 position:absolute;
-left:0;
 top:0;
+left:0;
 width:100%;
 height:100%;
 pointer-events:none;
 }
 
-.popup{
-position:absolute;
-left:50%;
-top:50%;
-transform:translate(-50%,-50%);
-font-size:90px;
-z-index:999;
-display:none;
-}
-
-.tick{
-color:#00cc44;
-}
-
-.cross{
-color:#ff2222;
-}
-
-/* SLIDE 3 */
+/* ---------------- SLIDE 3 ---------------- */
 
 #slide3{
+background:white;
 justify-content:center;
 align-items:center;
-flex-direction:column;
 overflow:hidden;
-background:white;
+flex-direction:column;
 }
 
 .amazing{
-font-size:clamp(40px,8vw,90px);
+font-size:clamp(40px,8vw,80px);
 font-weight:bold;
-color:#ff4da6;
+color:#ff6b6b;
 z-index:5;
 }
 
 .sub{
-font-size:clamp(18px,3vw,30px);
-color:#444;
+font-size:clamp(20px,4vw,35px);
+margin-top:10px;
+color:#555;
 z-index:5;
 }
 
 .rain{
 position:absolute;
-top:-50px;
-font-size:35px;
+font-size:40px;
 animation:fall linear infinite;
 }
 
 @keyframes fall{
-to{
+0%{
+transform:translateY(-120px) rotate(0deg);
+}
+100%{
 transform:translateY(120vh) rotate(360deg);
 }
 }
 
+@media(max-width:768px){
+
+.columns{
+gap:25px;
+}
+
+.card{
+width:120px;
+height:120px;
+}
+
+.label{
+font-size:14px;
+}
+
+}
+
 </style>
 </head>
-
 <body>
+
+<!-- AUDIO -->
+
+<audio id="clap" src="assets/clap.mp3"></audio>
+<audio id="wrong" src="assets/wrong.mp3"></audio>
 
 <!-- SLIDE 1 -->
 
-<div id="slide1" class="slide active">
-<img id="logo" src="assets/innovine-logo.png">
+<div class="slide active" id="slide1">
+
+<img src="assets/innovine-logo.png">
+
+<div class="tapText">
+Tap Anywhere To Start
+</div>
+
 </div>
 
 <!-- SLIDE 2 -->
 
-<div id="slide2" class="slide">
+<div class="slide" id="slide2">
 
 <div class="instruction">
-Identify the shape and match it to the correct object
+Identify the Shape and match it to the correct object.
 </div>
 
-<div class="game-area">
+<div class="gameArea">
 
 <svg id="lines"></svg>
 
+<div class="columns">
+
 <div class="column">
 
-<div class="item">
-<div class="shape-card triangleBorder shape" data-shape="triangle">
+<div class="card shapeCard"
+data-shape="triangle">
+
 <img src="assets/triangle.png">
-</div>
-<div class="label">triangle</div>
+
+<div class="label">
+triangle
 </div>
 
-<div class="item">
-<div class="shape-card squareBorder shape" data-shape="square">
+</div>
+
+<div class="card shapeCard"
+data-shape="square">
+
 <img src="assets/square.png">
-</div>
-<div class="label">square</div>
+
+<div class="label">
+square
 </div>
 
-<div class="item">
-<div class="shape-card circleBorder shape" data-shape="circle">
+</div>
+
+<div class="card shapeCard"
+data-shape="circle">
+
 <img src="assets/circle.png">
-</div>
-<div class="label">circle</div>
+
+<div class="label">
+circle
 </div>
 
-<div class="item">
-<div class="shape-card rectangleBorder shape" data-shape="rectangle">
-<img src="assets/rectangle.png">
 </div>
-<div class="label">rectangle</div>
+
+<div class="card shapeCard"
+data-shape="rectangle">
+
+<img src="assets/rectangle.png">
+
+<div class="label">
+rectangle
+</div>
+
 </div>
 
 </div>
 
 <div class="column">
 
-<div class="item">
-<div class="object-card obj1 object" data-object="donut">
-<img src="assets/donut.png">
-</div>
-</div>
+<div class="card objectCard"
+data-object="nachos">
 
-<div class="item">
-<div class="object-card obj2 object" data-object="laptop">
-<img src="assets/laptop.png">
-</div>
-</div>
-
-<div class="item">
-<div class="object-card obj3 object" data-object="nachos">
 <img src="assets/nachos.png">
-</div>
+
 </div>
 
-<div class="item">
-<div class="object-card obj4 object" data-object="clock">
+<div class="card objectCard"
+data-object="clock">
+
 <img src="assets/clock.png">
+
 </div>
+
+<div class="card objectCard"
+data-object="donut">
+
+<img src="assets/donut.png">
+
 </div>
+
+<div class="card objectCard"
+data-object="laptop">
+
+<img src="assets/laptop.png">
 
 </div>
 
 </div>
 
-<div class="popup tick" id="tick">✓</div>
-<div class="popup cross" id="cross">✗</div>
+</div>
+
+</div>
 
 </div>
 
 <!-- SLIDE 3 -->
 
-<div id="slide3" class="slide">
-<div class="amazing">Amazing!</div>
-<div class="sub">Great Job!</div>
+<div class="slide" id="slide3">
+
+<div class="amazing">
+Amazing!
 </div>
 
-<audio id="clap" src="assets/clap.mp3"></audio>
-<audio id="wrong" src="assets/wrong.mp3"></audio>
+<div class="sub">
+Great Job!
+</div>
+
+</div>
+
+<div class="tick" id="tick">✔</div>
+<div class="cross" id="cross">✖</div>
 
 <script>
 
-setTimeout(()=>{
+const slide1=document.getElementById("slide1");
+const slide2=document.getElementById("slide2");
+const slide3=document.getElementById("slide3");
+
+slide1.addEventListener("click",()=>{
+
 slide1.classList.remove("active");
 slide2.classList.add("active");
-},2500);
+
+});
 
 const answers={
 triangle:"nachos",
@@ -325,48 +402,53 @@ let completed=0;
 const clap=document.getElementById("clap");
 const wrong=document.getElementById("wrong");
 
-document.querySelectorAll(".shape").forEach(shape=>{
+const tick=document.getElementById("tick");
+const cross=document.getElementById("cross");
 
-shape.addEventListener("click",()=>{
+const svg=document.getElementById("lines");
 
-if(shape.dataset.done==="yes") return;
+document.querySelectorAll(".shapeCard").forEach(card=>{
 
-document.querySelectorAll(".shape").forEach(s=>{
-s.classList.remove("selected");
+card.addEventListener("click",()=>{
+
+if(card.dataset.done) return;
+
+document.querySelectorAll(".shapeCard")
+.forEach(c=>c.classList.remove("selected"));
+
+selectedShape=card;
+
+card.classList.add("selected");
+
 });
 
-selectedShape=shape;
-shape.classList.add("selected");
-
 });
 
-});
+document.querySelectorAll(".objectCard").forEach(card=>{
 
-document.querySelectorAll(".object").forEach(object=>{
-
-object.addEventListener("click",()=>{
+card.addEventListener("click",()=>{
 
 if(!selectedShape) return;
 
-const shapeName=selectedShape.dataset.shape;
-const objectName=object.dataset.object;
+const shape=selectedShape.dataset.shape;
+const object=card.dataset.object;
 
-if(answers[shapeName]===objectName){
+if(answers[shape]===object){
 
 showTick();
+
 clap.currentTime=0;
 clap.play();
 
-drawLine(selectedShape,object);
+drawLine(selectedShape,card);
 
 selectedShape.dataset.done="yes";
-object.dataset.done="yes";
+card.dataset.done="yes";
 
 selectedShape.style.opacity=".6";
-object.style.opacity=".6";
+card.style.opacity=".6";
 
 selectedShape.classList.remove("selected");
-
 selectedShape=null;
 
 completed++;
@@ -374,10 +456,13 @@ completed++;
 if(completed===4){
 
 setTimeout(()=>{
+
 slide2.classList.remove("active");
 slide3.classList.add("active");
-startRain();
-},1500);
+
+createRain();
+
+},1200);
 
 }
 
@@ -388,8 +473,6 @@ showCross();
 wrong.currentTime=0;
 wrong.play();
 
-selectedShape.classList.remove("selected");
-selectedShape=null;
 }
 
 });
@@ -397,35 +480,36 @@ selectedShape=null;
 });
 
 function showTick(){
-const tick=document.getElementById("tick");
+
 tick.style.display="block";
+
 setTimeout(()=>{
 tick.style.display="none";
-},800);
+},700);
+
 }
 
 function showCross(){
-const cross=document.getElementById("cross");
+
 cross.style.display="block";
+
 setTimeout(()=>{
 cross.style.display="none";
-},800);
+},700);
+
 }
 
 function drawLine(start,end){
 
-const svg=document.getElementById("lines");
+const svgRect=svg.getBoundingClientRect();
+const r1=start.getBoundingClientRect();
+const r2=end.getBoundingClientRect();
 
-const gameRect=svg.parentElement.getBoundingClientRect();
+const x1=r1.right-svgRect.left;
+const y1=r1.top+r1.height/2-svgRect.top;
 
-const s=start.getBoundingClientRect();
-const e=end.getBoundingClientRect();
-
-const x1=s.right-gameRect.left;
-const y1=s.top+s.height/2-gameRect.top;
-
-const x2=e.left-gameRect.left;
-const y2=e.top+e.height/2-gameRect.top;
+const x2=r2.left-svgRect.left;
+const y2=r2.top+r2.height/2-svgRect.top;
 
 const line=document.createElementNS(
 "http://www.w3.org/2000/svg",
@@ -436,8 +520,7 @@ line.setAttribute("x1",x1);
 line.setAttribute("y1",y1);
 line.setAttribute("x2",x2);
 line.setAttribute("y2",y2);
-
-line.setAttribute("stroke","#00aa44");
+line.setAttribute("stroke","#27ae60");
 line.setAttribute("stroke-width","6");
 line.setAttribute("stroke-linecap","round");
 
@@ -445,22 +528,27 @@ svg.appendChild(line);
 
 }
 
-function startRain(){
+function createRain(){
 
-const shapes=["▲","■","●","▭"];
+const shapes=[
+"▲","■","●","★","◆","⬟"
+];
 
-for(let i=0;i<60;i++){
+for(let i=0;i<40;i++){
 
-const el=document.createElement("div");
+const s=document.createElement("div");
 
-el.className="rain";
-el.innerHTML=shapes[Math.floor(Math.random()*shapes.length)];
+s.className="rain";
+s.innerHTML=shapes[Math.floor(Math.random()*shapes.length)];
 
-el.style.left=Math.random()*100+"vw";
-el.style.animationDuration=(3+Math.random()*4)+"s";
-el.style.animationDelay=Math.random()*2+"s";
+s.style.left=Math.random()*100+"vw";
+s.style.animationDuration=
+(3+Math.random()*4)+"s";
 
-document.getElementById("slide3").appendChild(el);
+s.style.animationDelay=
+Math.random()*2+"s";
+
+slide3.appendChild(s);
 
 }
 
