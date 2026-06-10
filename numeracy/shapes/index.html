@@ -73,16 +73,21 @@ color:#333;
 padding:10px;
 }
 
+/* CENTERED GAME AREA */
+
 .game-area{
 flex:1;
 position:relative;
 display:flex;
-justify-content:space-between;
+justify-content:center;
 align-items:center;
+gap:120px;
+max-width:900px;
+margin:0 auto;
+width:100%;
 }
 
 .column{
-width:42%;
 display:flex;
 flex-direction:column;
 justify-content:space-evenly;
@@ -217,7 +222,7 @@ transform:translateY(120vh) rotate(360deg);
 <div id="slide2" class="slide">
 
 <div class="instruction">
-Identify the Shape and match it to the correct object.
+Identify the shape and match it to the correct object
 </div>
 
 <div class="game-area">
