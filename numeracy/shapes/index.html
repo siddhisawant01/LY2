@@ -2,156 +2,467 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shape Tap Game</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+<title>Shapes Matching Game</title>
+
 <style>
-  body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: Arial; }
-  .slide { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-  #slide1 { background: white; display: flex; }
-  #slide1 img { width: 200px; height: auto; }
-  .game-slide { display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-    background: linear-gradient(135deg, #ffd1dc, #ffe5b4, #c1f0f6); padding-top: 50px; }
-  .instruction { font-size: 36px; color: #333; margin-bottom: 20px; text-shadow: 1px 1px 2px #fff;
-    background-color: rgba(255,255,255,0.6); padding: 12px 25px; border-radius: 15px; border: 2px solid #fff; }
-  .play-voice-btn { font-size: 20px; padding: 6px 12px; margin-bottom: 20px; border-radius: 10px; cursor:pointer; background-color:#ffb347; border:none; color:white; }
-  .options { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-  .options img { width: 130px; height: 130px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
-    border: 4px solid #fff; border-radius: 20px; padding: 5px; box-shadow: 3px 3px 8px rgba(0,0,0,0.3);}
-  .options img.wrong { animation: giggle 0.2s; }
-  @keyframes giggle { 0% {transform:rotate(0deg);}25%{transform:rotate(12deg);}50%{transform:rotate(-12deg);}75%{transform:rotate(12deg);}100%{transform:rotate(0deg);} }
-  .correct-feedback { color: green; font-size: 36px; margin-top: 20px; display: none; text-shadow:1px 1px 2px #fff; }
-  #slide5 { display:flex; flex-direction: column; justify-content: center; align-items: center;
-    background: linear-gradient(135deg, #ffd1dc, #ffe5b4, #c1f0f6); }
-  #playAgainBtn { margin-top: 20px; font-size: 28px; padding: 12px 25px; cursor:pointer;
-    background-color:#ffb347; border:none; border-radius:12px; color:white; box-shadow:2px 2px 6px #333; }
-  canvas { position:absolute; pointer-events:none; }
-</style>
-</head>
-<body>
 
-<div id="slide1" class="slide">
-  <img src="assets/innovine-logo.png" alt="Innovine Logo">
-</div>
-
-<div id="slide2" class="slide game-slide">
-  <div class="instruction">Tap on the circle:</div>
-  <button class="play-voice-btn">🔊 Play Voice</button>
-  <div class="options">
-    <img src="assets/circle.png" data-correct="true">
-    <img src="assets/square-1.png">
-    <img src="assets/triangle-1.png">
-  </div>
-  <div class="correct-feedback">Good Job!</div>
-  <audio class="voice" src="assets/voice_circle.mp3"></audio>
-</div>
-
-<div id="slide3" class="slide game-slide">
-  <div class="instruction">Tap on the square:</div>
-  <button class="play-voice-btn">🔊 Play Voice</button>
-  <div class="options">
-    <img src="assets/square.png" data-correct="true">
-    <img src="assets/circle-1.png">
-    <img src="assets/triangle-2.png">
-  </div>
-  <div class="correct-feedback">Good Job!</div>
-  <audio class="voice" src="assets/voice_square.mp3"></audio>
-</div>
-
-<div id="slide4" class="slide game-slide">
-  <div class="instruction">Tap on the triangle:</div>
-  <button class="play-voice-btn">🔊 Play Voice</button>
-  <div class="options">
-    <img src="assets/triangle.png" data-correct="true">
-    <img src="assets/circle-2.png">
-    <img src="assets/square-2.png">
-  </div>
-  <div class="correct-feedback">Good Job!</div>
-  <audio class="voice" src="assets/voice_triangle.mp3"></audio>
-</div>
-
-<div id="slide5" class="slide">
-  <div class="instruction">🎉 Good Job! 🎉</div>
-  <button id="playAgainBtn">Play Again</button>
-</div>
-
-<audio id="correctSound" src="assets/correct.mp3"></audio>
-<audio id="wrongSound" src="assets/wrong.mp3"></audio>
-<audio id="clapSound" src="assets/freesound_community-claps-44774.mp3"></audio>
-
-<canvas id="confetti"></canvas>
-
-<script>
-// Shuffle game slides
-let slides = [document.getElementById('slide2'), document.getElementById('slide3'), document.getElementById('slide4')];
-slides = slides.sort(() => Math.random() - 0.5);
-const allSlides = [document.getElementById('slide1'), ...slides, document.getElementById('slide5')];
-
-let currentSlide = 0;
-let attempts = 0;
-
-function showSlide(index) {
-  allSlides.forEach(s => s.style.display = 'none');
-  allSlides[index].style.display = 'flex';
-  attempts = 0;
-  // Play voice instruction if exists
-  const voice = allSlides[index].querySelector('.voice');
-  if (voice) { voice.currentTime = 0; voice.play(); }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+-webkit-tap-highlight-color:transparent;
 }
 
-// Show logo first, then first game slide
-showSlide(0);
-setTimeout(() => { showSlide(1); }, 2000);
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+background:#fff;
+}
 
-// Game logic
-allSlides.slice(1, 4).forEach(slide => {
-  const options = slide.querySelectorAll('.options img');
-  const feedback = slide.querySelector('.correct-feedback');
-  options.forEach(option => {
-    option.addEventListener('click', () => {
-      if(option.dataset.correct){
-        feedback.style.display='block';
-        document.getElementById('correctSound').play();
-        setTimeout(() => {
-          feedback.style.display='none';
-          currentSlide++;
-          if(currentSlide < 4) showSlide(currentSlide);
-          else { showSlide(4); startConfetti(); document.getElementById('clapSound').play(); }
-        }, 800);
-      } else {
-        attempts++; option.classList.add('wrong'); document.getElementById('wrongSound').play();
-        setTimeout(() => option.classList.remove('wrong'),400);
-        if(attempts>=2) { options.forEach(o=>{ if(o.dataset.correct){ o.style.boxShadow='0 0 20px 6px yellow'; setTimeout(()=>o.style.boxShadow='',800); } }); }
-      }
-    });
-  });
+.slide{
+width:100%;
+height:100%;
+display:none;
+position:relative;
+}
+
+.slide.active{
+display:flex;
+}
+
+/* SLIDE 1 */
+
+#slide1{
+justify-content:center;
+align-items:center;
+background:white;
+}
+
+#logo{
+width:min(70vw,320px);
+max-height:50vh;
+object-fit:contain;
+}
+
+.fade{
+animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+from{opacity:0}
+to{opacity:1}
+}
+
+/* SLIDE 2 */
+
+#slide2{
+flex-direction:column;
+background:#f9fbff;
+padding:10px;
+}
+
+.instruction{
+text-align:center;
+font-size:clamp(16px,2vw,28px);
+font-weight:bold;
+color:#333;
+padding:10px;
+}
+
+.game-area{
+flex:1;
+position:relative;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.column{
+width:42%;
+display:flex;
+flex-direction:column;
+justify-content:space-evenly;
+height:100%;
+}
+
+.item{
+display:flex;
+align-items:center;
+gap:10px;
+position:relative;
+}
+
+.shape-card,
+.object-card{
+width:min(18vw,110px);
+height:min(18vw,110px);
+border-radius:18px;
+background:white;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+border:5px solid;
+box-shadow:0 4px 10px rgba(0,0,0,.15);
+position:relative;
+}
+
+.shape-card.selected{
+transform:scale(1.08);
+}
+
+.label{
+font-size:clamp(12px,1.5vw,18px);
+font-weight:bold;
+text-transform:lowercase;
+}
+
+.shape-card img,
+.object-card img{
+max-width:80%;
+max-height:80%;
+object-fit:contain;
+}
+
+.circleBorder{border-color:#00bfff;}
+.squareBorder{border-color:#00cc66;}
+.triangleBorder{border-color:#ff3333;}
+.rectangleBorder{border-color:#ff9900;}
+
+.obj1{border-color:#ff66cc;}
+.obj2{border-color:#66ccff;}
+.obj3{border-color:#ffcc00;}
+.obj4{border-color:#66cc66;}
+
+#lines{
+position:absolute;
+left:0;
+top:0;
+width:100%;
+height:100%;
+pointer-events:none;
+}
+
+.popup{
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+font-size:90px;
+z-index:999;
+display:none;
+}
+
+.tick{
+color:#00cc44;
+}
+
+.cross{
+color:#ff2222;
+}
+
+/* SLIDE 3 */
+
+#slide3{
+justify-content:center;
+align-items:center;
+flex-direction:column;
+overflow:hidden;
+background:white;
+}
+
+.amazing{
+font-size:clamp(40px,8vw,90px);
+font-weight:bold;
+color:#ff4da6;
+z-index:5;
+}
+
+.sub{
+font-size:clamp(18px,3vw,30px);
+color:#444;
+z-index:5;
+}
+
+.rain{
+position:absolute;
+top:-50px;
+font-size:35px;
+animation:fall linear infinite;
+}
+
+@keyframes fall{
+to{
+transform:translateY(120vh) rotate(360deg);
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SLIDE 1 -->
+
+<div id="slide1" class="slide active">
+<img id="logo" src="assets/innovine-logo.png">
+</div>
+
+<!-- SLIDE 2 -->
+
+<div id="slide2" class="slide">
+
+<div class="instruction">
+Identify the Shape and match it to the correct object.
+</div>
+
+<div class="game-area">
+
+<svg id="lines"></svg>
+
+<div class="column">
+
+<div class="item">
+<div class="shape-card triangleBorder shape" data-shape="triangle">
+<img src="assets/triangle.png">
+</div>
+<div class="label">triangle</div>
+</div>
+
+<div class="item">
+<div class="shape-card squareBorder shape" data-shape="square">
+<img src="assets/square.png">
+</div>
+<div class="label">square</div>
+</div>
+
+<div class="item">
+<div class="shape-card circleBorder shape" data-shape="circle">
+<img src="assets/circle.png">
+</div>
+<div class="label">circle</div>
+</div>
+
+<div class="item">
+<div class="shape-card rectangleBorder shape" data-shape="rectangle">
+<img src="assets/rectangle.png">
+</div>
+<div class="label">rectangle</div>
+</div>
+
+</div>
+
+<div class="column">
+
+<div class="item">
+<div class="object-card obj1 object" data-object="donut">
+<img src="assets/donut.png">
+</div>
+</div>
+
+<div class="item">
+<div class="object-card obj2 object" data-object="laptop">
+<img src="assets/laptop.png">
+</div>
+</div>
+
+<div class="item">
+<div class="object-card obj3 object" data-object="nachos">
+<img src="assets/nachos.png">
+</div>
+</div>
+
+<div class="item">
+<div class="object-card obj4 object" data-object="clock">
+<img src="assets/clock.png">
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="popup tick" id="tick">✓</div>
+<div class="popup cross" id="cross">✗</div>
+
+</div>
+
+<!-- SLIDE 3 -->
+
+<div id="slide3" class="slide">
+<div class="amazing">Amazing!</div>
+<div class="sub">Great Job!</div>
+</div>
+
+<audio id="clap" src="assets/clap.mp3"></audio>
+<audio id="wrong" src="assets/wrong.mp3"></audio>
+
+<script>
+
+setTimeout(()=>{
+slide1.classList.remove("active");
+slide2.classList.add("active");
+},2500);
+
+const answers={
+triangle:"nachos",
+square:"clock",
+circle:"donut",
+rectangle:"laptop"
+};
+
+let selectedShape=null;
+let completed=0;
+
+const clap=document.getElementById("clap");
+const wrong=document.getElementById("wrong");
+
+document.querySelectorAll(".shape").forEach(shape=>{
+
+shape.addEventListener("click",()=>{
+
+if(shape.dataset.done==="yes") return;
+
+document.querySelectorAll(".shape").forEach(s=>{
+s.classList.remove("selected");
 });
 
-// Play voice buttons
-document.querySelectorAll('.play-voice-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const slide = btn.parentElement;
-    const voice = slide.querySelector('.voice');
-    if (voice) { voice.currentTime = 0; voice.play(); }
-  });
+selectedShape=shape;
+shape.classList.add("selected");
+
 });
 
-document.getElementById('playAgainBtn').addEventListener('click', () => {
-  stopConfetti();
-  slides = slides.sort(() => Math.random() - 0.5); // jumble again
-  currentSlide = 1;
-  showSlide(currentSlide);
 });
 
-// Confetti
-const canvas = document.getElementById('confetti'); const ctx = canvas.getContext('2d');
-let confettiParticles = [], confettiAnimation;
-function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
-window.addEventListener('resize',resizeCanvas);resizeCanvas();
-function createConfetti(){confettiParticles=[];for(let i=0;i<150;i++){confettiParticles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*6+4,d:Math.random()*15+5,color:`hsl(${Math.random()*360},100%,50%)`,tilt:Math.random()*10-10});}}
-function drawConfetti(){ctx.clearRect(0,0,canvas.width,canvas.height);confettiParticles.forEach(p=>{ctx.beginPath();ctx.lineWidth=p.r/2;ctx.strokeStyle=p.color;ctx.moveTo(p.x+p.tilt+p.r/4,p.y);ctx.lineTo(p.x+p.tilt,p.y+p.d);ctx.stroke();});updateConfetti();}
-function updateConfetti(){confettiParticles.forEach(p=>{p.y+=2;if(p.y>canvas.height)p.y=0;});}
-function startConfetti(){createConfetti(); confettiAnimation=setInterval(drawConfetti,20);}
-function stopConfetti(){clearInterval(confettiAnimation);ctx.clearRect(0,0,canvas.width,canvas.height);}
+document.querySelectorAll(".object").forEach(object=>{
+
+object.addEventListener("click",()=>{
+
+if(!selectedShape) return;
+
+const shapeName=selectedShape.dataset.shape;
+const objectName=object.dataset.object;
+
+if(answers[shapeName]===objectName){
+
+showTick();
+clap.currentTime=0;
+clap.play();
+
+drawLine(selectedShape,object);
+
+selectedShape.dataset.done="yes";
+object.dataset.done="yes";
+
+selectedShape.style.opacity=".6";
+object.style.opacity=".6";
+
+selectedShape.classList.remove("selected");
+
+selectedShape=null;
+
+completed++;
+
+if(completed===4){
+
+setTimeout(()=>{
+slide2.classList.remove("active");
+slide3.classList.add("active");
+startRain();
+},1500);
+
+}
+
+}else{
+
+showCross();
+
+wrong.currentTime=0;
+wrong.play();
+
+selectedShape.classList.remove("selected");
+selectedShape=null;
+}
+
+});
+
+});
+
+function showTick(){
+const tick=document.getElementById("tick");
+tick.style.display="block";
+setTimeout(()=>{
+tick.style.display="none";
+},800);
+}
+
+function showCross(){
+const cross=document.getElementById("cross");
+cross.style.display="block";
+setTimeout(()=>{
+cross.style.display="none";
+},800);
+}
+
+function drawLine(start,end){
+
+const svg=document.getElementById("lines");
+
+const gameRect=svg.parentElement.getBoundingClientRect();
+
+const s=start.getBoundingClientRect();
+const e=end.getBoundingClientRect();
+
+const x1=s.right-gameRect.left;
+const y1=s.top+s.height/2-gameRect.top;
+
+const x2=e.left-gameRect.left;
+const y2=e.top+e.height/2-gameRect.top;
+
+const line=document.createElementNS(
+"http://www.w3.org/2000/svg",
+"line"
+);
+
+line.setAttribute("x1",x1);
+line.setAttribute("y1",y1);
+line.setAttribute("x2",x2);
+line.setAttribute("y2",y2);
+
+line.setAttribute("stroke","#00aa44");
+line.setAttribute("stroke-width","6");
+line.setAttribute("stroke-linecap","round");
+
+svg.appendChild(line);
+
+}
+
+function startRain(){
+
+const shapes=["▲","■","●","▭"];
+
+for(let i=0;i<60;i++){
+
+const el=document.createElement("div");
+
+el.className="rain";
+el.innerHTML=shapes[Math.floor(Math.random()*shapes.length)];
+
+el.style.left=Math.random()*100+"vw";
+el.style.animationDuration=(3+Math.random()*4)+"s";
+el.style.animationDelay=Math.random()*2+"s";
+
+document.getElementById("slide3").appendChild(el);
+
+}
+
+}
+
 </script>
+
 </body>
 </html>
