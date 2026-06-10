@@ -344,7 +344,7 @@ Identify the short object
 </div>
 
 <div class="card" onclick="checkAnswer(this,true,6)">
-<img src="assets/house.png">
+<img src="assets/house.png" style="width:65%;height:60%;object-fit:contain;">
 <div class="label">house</div>
 </div>
 
@@ -364,6 +364,7 @@ Identify the short object
 </div>
 
 <audio id="wrongSound" src="assets/wrong.mp3"></audio>
+<audio id="clapSound" src="assets/clap.mp3"></audio>
 
 <script>
 
@@ -415,6 +416,10 @@ let cross=slide.querySelector('.wrong');
 if(isCorrect){
 
 tick.style.display='block';
+
+let clap=document.getElementById('clapSound');
+clap.currentTime=0;
+clap.play();
 
 setTimeout(()=>{
 tick.style.display='none';
