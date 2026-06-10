@@ -324,6 +324,10 @@ Match the Uppercase letter to lowercase letters.
 <source src="assets/wrong.mp3" type="audio/mpeg">
 </audio>
 
+<audio id="clapSound" preload="auto">
+<source src="assets/clap.mp3" type="audio/mpeg">
+</audio>
+
 </div>
 
 <!-- Slide 3 -->
@@ -372,6 +376,11 @@ if(upperLetter===lowerLetter){
 drawLine(selectedUpper,card);
 
 showTick();
+
+/* Play clap sound */
+const clap=document.getElementById("clapSound");
+clap.currentTime=0;
+clap.play();
 
 selectedUpper.style.pointerEvents="none";
 card.style.pointerEvents="none";
