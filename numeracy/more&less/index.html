@@ -274,6 +274,65 @@ font-size:80px;
 
 let currentSlide = 1;
 
+const slideData = {
+2:{
+correct:"assets/morefruits.png",
+wrong:"assets/lessfruits.png",
+next:3
+},
+3:{
+correct:"assets/lessfish.png",
+wrong:"assets/morefish.png",
+next:4
+},
+4:{
+correct:"assets/moremangoes.png",
+wrong:"assets/lessmangoes.png",
+next:5
+},
+5:{
+correct:"assets/lessicecream.png",
+wrong:"assets/moreicecream.png",
+next:6
+},
+6:{
+correct:"assets/morecandies.png",
+wrong:"assets/lesscandies.png",
+next:7
+}
+};
+
+function shuffleAnswers(){
+
+Object.keys(slideData).forEach(slideNum=>{
+
+const slide=document.getElementById("slide"+slideNum);
+const options=slide.querySelector(".options");
+
+const data=slideData[slideNum];
+
+const correctHTML=
+`<div class="choice" onclick="checkAnswer(true,${data.next})">
+<img src="${data.correct}">
+</div>`;
+
+const wrongHTML=
+`<div class="choice" onclick="checkAnswer(false)">
+<img src="${data.wrong}">
+</div>`;
+
+if(Math.random()<0.5){
+options.innerHTML=correctHTML+wrongHTML;
+}else{
+options.innerHTML=wrongHTML+correctHTML;
+}
+
+});
+
+}
+
+shuffleAnswers();
+
 setTimeout(()=>{
 showSlide(2);
 },2500);
@@ -358,6 +417,7 @@ c.style.animationDelay=
 document.body.appendChild(c);
 }
 }
+
 </script>
 
 </body>
