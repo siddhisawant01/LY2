@@ -1,0 +1,2294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+>
+
+<title>In and Out</title>
+
+<style>
+
+/* =====================================================
+   BASIC PAGE SETTINGS
+===================================================== */
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  font-family:"Trebuchet MS","Arial Rounded MT Bold",Arial,sans-serif;
+  touch-action:manipulation;
+}
+
+body{
+  background:#ffffff;
+}
+
+button{
+  font-family:inherit;
+}
+
+
+/* =====================================================
+   ALL SCREENS
+===================================================== */
+
+.screen{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100vh;
+  height:100dvh;
+  display:none;
+  overflow:hidden;
+}
+
+.screen.active{
+  display:flex;
+}
+
+
+/* =====================================================
+   SLIDE 1 - INNOVINE LOGO
+===================================================== */
+
+#logoScreen{
+  background:#ffffff;
+  align-items:center;
+  justify-content:center;
+}
+
+#logoScreen img{
+  width:min(48vw,330px);
+  max-height:48vh;
+  object-fit:contain;
+}
+
+
+/* =====================================================
+   QUESTION SCREEN
+===================================================== */
+
+#questionScreen{
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding:
+    max(10px,2vh)
+    max(10px,2vw)
+    max(12px,2vh);
+
+  isolation:isolate;
+}
+
+
+/* =====================================================
+   FIVE DIFFERENT PASTEL BACKGROUNDS
+===================================================== */
+
+.background-1{
+  background:
+
+  radial-gradient(
+    circle at 0% 108%,
+    transparent 0 17%,
+    rgba(255,157,196,.65) 17% 22%,
+    rgba(255,207,123,.65) 22% 27%,
+    rgba(134,223,210,.65) 27% 32%,
+    rgba(135,196,255,.60) 32% 37%,
+    transparent 37%
+  ),
+
+  radial-gradient(
+    circle at 103% -8%,
+    transparent 0 13%,
+    rgba(196,169,255,.45) 13% 18%,
+    rgba(255,180,211,.48) 18% 23%,
+    rgba(255,224,145,.48) 23% 28%,
+    transparent 28%
+  ),
+
+  linear-gradient(
+    145deg,
+    #fff6d9,
+    #ffe7f1,
+    #e7f7ff
+  );
+}
+
+
+.background-2{
+  background:
+
+  radial-gradient(
+    circle at 102% 110%,
+    transparent 0 15%,
+    rgba(151,214,255,.60) 15% 20%,
+    rgba(168,234,205,.60) 20% 25%,
+    rgba(255,224,137,.62) 25% 30%,
+    rgba(255,176,206,.58) 30% 35%,
+    transparent 35%
+  ),
+
+  radial-gradient(
+    circle at -3% -7%,
+    transparent 0 13%,
+    rgba(255,194,128,.48) 13% 18%,
+    rgba(255,156,197,.45) 18% 23%,
+    rgba(177,171,255,.43) 23% 28%,
+    transparent 28%
+  ),
+
+  linear-gradient(
+    145deg,
+    #e8fff2,
+    #fff4cf,
+    #f8e8ff
+  );
+}
+
+
+.background-3{
+  background:
+
+  radial-gradient(
+    circle at -3% 109%,
+    transparent 0 15%,
+    rgba(189,170,255,.58) 15% 20%,
+    rgba(255,176,213,.57) 20% 25%,
+    rgba(255,219,131,.60) 25% 30%,
+    rgba(132,223,214,.58) 30% 35%,
+    transparent 35%
+  ),
+
+  radial-gradient(
+    circle at 102% -7%,
+    transparent 0 13%,
+    rgba(128,205,255,.48) 13% 18%,
+    rgba(164,236,204,.48) 18% 23%,
+    rgba(255,219,141,.45) 23% 28%,
+    transparent 28%
+  ),
+
+  linear-gradient(
+    145deg,
+    #e4f7ff,
+    #f7e9ff,
+    #fff0d9
+  );
+}
+
+
+.background-4{
+  background:
+
+  radial-gradient(
+    circle at 103% 110%,
+    transparent 0 16%,
+    rgba(255,181,207,.60) 16% 21%,
+    rgba(255,221,138,.60) 21% 26%,
+    rgba(147,228,206,.58) 26% 31%,
+    rgba(148,205,255,.57) 31% 36%,
+    transparent 36%
+  ),
+
+  radial-gradient(
+    circle at -3% -8%,
+    transparent 0 12%,
+    rgba(181,166,255,.48) 12% 17%,
+    rgba(255,181,214,.48) 17% 22%,
+    rgba(255,213,139,.45) 22% 27%,
+    transparent 27%
+  ),
+
+  linear-gradient(
+    145deg,
+    #fff0f7,
+    #e9fff6,
+    #eaf2ff
+  );
+}
+
+
+.background-5{
+  background:
+
+  radial-gradient(
+    circle at -2% 110%,
+    transparent 0 15%,
+    rgba(133,210,255,.60) 15% 20%,
+    rgba(143,230,208,.60) 20% 25%,
+    rgba(255,222,133,.60) 25% 30%,
+    rgba(255,173,207,.58) 30% 35%,
+    transparent 35%
+  ),
+
+  radial-gradient(
+    circle at 103% -8%,
+    transparent 0 13%,
+    rgba(255,184,132,.45) 13% 18%,
+    rgba(255,166,204,.45) 18% 23%,
+    rgba(180,169,255,.45) 23% 28%,
+    transparent 28%
+  ),
+
+  linear-gradient(
+    145deg,
+    #fff7d8,
+    #e8f6ff,
+    #f3e8ff
+  );
+}
+
+
+/* =====================================================
+   INSTRUCTION BOX
+===================================================== */
+
+.instruction-box{
+  position:relative;
+  z-index:2;
+
+  width:min(96%,1050px);
+
+  min-height:68px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:10px 22px;
+
+  border:4px solid rgba(255,255,255,.96);
+
+  border-radius:25px;
+
+  background:rgba(255,255,255,.90);
+
+  box-shadow:
+    0 7px 0 rgba(93,84,151,.16),
+    0 10px 25px rgba(67,65,115,.15);
+
+  text-align:center;
+}
+
+
+#instructionText{
+  margin:0;
+
+  color:#4d3f78;
+
+  font-size:clamp(
+    21px,
+    3.2vw,
+    40px
+  );
+
+  font-weight:900;
+
+  line-height:1.15;
+}
+
+
+/* =====================================================
+   IMAGE OPTIONS
+===================================================== */
+
+.options-area{
+  position:relative;
+  z-index:2;
+
+  width:min(98%,1120px);
+
+  flex:1;
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(0,1fr)
+    minmax(0,1fr);
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:clamp(10px,3vw,35px);
+
+  padding:
+    clamp(10px,2vh,24px)
+    0
+    4px;
+
+  min-height:0;
+}
+
+
+.picture-option{
+  position:relative;
+
+  width:100%;
+
+  height:min(
+    58vh,
+    510px
+  );
+
+  min-height:220px;
+
+  border:none;
+
+  border-radius:30px;
+
+  padding:clamp(8px,1.5vw,15px);
+
+  cursor:pointer;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff78a7,
+      #ffbc58,
+      #60d6c2,
+      #6ebcff,
+      #b28bff
+    );
+
+  box-shadow:
+    0 10px 0 rgba(87,76,136,.20),
+    0 15px 28px rgba(60,50,100,.18);
+
+  transition:
+    transform .15s ease,
+    filter .15s ease;
+
+  outline:none;
+}
+
+
+.picture-option::before{
+  content:"";
+
+  position:absolute;
+
+  inset:8px;
+
+  border-radius:22px;
+
+  background:#ffffff;
+
+  z-index:0;
+}
+
+
+.picture-option img{
+  position:relative;
+
+  z-index:1;
+
+  width:100%;
+  height:100%;
+
+  display:block;
+
+  object-fit:contain;
+
+  border-radius:20px;
+
+  background:#ffffff;
+
+  pointer-events:none;
+}
+
+
+.picture-option:active{
+  transform:scale(.96);
+}
+
+
+.picture-option.disabled{
+  pointer-events:none;
+}
+
+
+.picture-option.correct-choice{
+  animation:correctPulse .55s ease;
+}
+
+
+.picture-option.wrong-choice{
+  animation:wrongShake .48s ease;
+}
+
+
+@keyframes correctPulse{
+
+  0%{
+    transform:scale(1);
+  }
+
+  45%{
+    transform:scale(1.05);
+  }
+
+  100%{
+    transform:scale(1);
+  }
+}
+
+
+@keyframes wrongShake{
+
+  0%,
+  100%{
+    transform:translateX(0);
+  }
+
+  20%{
+    transform:translateX(-10px);
+  }
+
+  40%{
+    transform:translateX(10px);
+  }
+
+  60%{
+    transform:translateX(-7px);
+  }
+
+  80%{
+    transform:translateX(7px);
+  }
+}
+
+
+/* =====================================================
+   GREEN TICK AND RED CROSS
+===================================================== */
+
+#feedbackSymbol{
+  position:fixed;
+
+  left:50%;
+  top:50%;
+
+  z-index:100;
+
+  width:clamp(
+    105px,
+    20vw,
+    205px
+  );
+
+  aspect-ratio:1;
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50%;
+
+  color:white;
+
+  font-size:clamp(
+    72px,
+    15vw,
+    155px
+  );
+
+  font-family:Arial,sans-serif;
+
+  font-weight:900;
+
+  line-height:1;
+
+  border:
+    clamp(7px,1vw,12px)
+    solid white;
+
+  box-shadow:
+    0 10px 32px
+    rgba(0,0,0,.28);
+
+  transform:
+    translate(-50%,-50%)
+    scale(.2);
+}
+
+
+#feedbackSymbol.show{
+  display:flex;
+
+  animation:
+    symbolPop
+    .48s
+    cubic-bezier(.2,1.35,.4,1)
+    forwards;
+}
+
+
+#feedbackSymbol.correct{
+  background:#36ba68;
+}
+
+
+#feedbackSymbol.wrong{
+  background:#ec4e59;
+}
+
+
+@keyframes symbolPop{
+
+  0%{
+    opacity:0;
+
+    transform:
+      translate(-50%,-50%)
+      scale(.2);
+  }
+
+  70%{
+    opacity:1;
+
+    transform:
+      translate(-50%,-50%)
+      scale(1.15);
+  }
+
+  100%{
+    opacity:1;
+
+    transform:
+      translate(-50%,-50%)
+      scale(1);
+  }
+}
+
+
+/* =====================================================
+   SMALL PROGRESS DOTS
+===================================================== */
+
+#progressDots{
+  position:relative;
+
+  z-index:2;
+
+  height:20px;
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  gap:8px;
+}
+
+
+.progress-dot{
+  width:11px;
+  height:11px;
+
+  border-radius:50%;
+
+  background:
+    rgba(101,87,148,.22);
+
+  border:
+    2px solid
+    rgba(255,255,255,.88);
+}
+
+
+.progress-dot.current{
+  width:17px;
+  height:17px;
+
+  background:#7259ba;
+}
+
+
+/* =====================================================
+   FINAL AMAZING SCREEN
+===================================================== */
+
+#endScreen{
+  align-items:center;
+
+  justify-content:center;
+
+  background:
+
+  radial-gradient(
+    circle at 10% 10%,
+    rgba(255,215,120,.82),
+    transparent 24%
+  ),
+
+  radial-gradient(
+    circle at 88% 15%,
+    rgba(255,161,206,.78),
+    transparent 27%
+  ),
+
+  radial-gradient(
+    circle at 17% 87%,
+    rgba(136,220,255,.76),
+    transparent 27%
+  ),
+
+  radial-gradient(
+    circle at 89% 88%,
+    rgba(154,235,207,.74),
+    transparent 29%
+  ),
+
+  linear-gradient(
+    145deg,
+    #fff4bf,
+    #ffe3f2,
+    #dfecff,
+    #e3ffef
+  );
+}
+
+
+.amazing-card{
+  position:relative;
+
+  z-index:10;
+
+  width:min(
+    86vw,
+    760px
+  );
+
+  padding:
+    clamp(28px,6vh,65px)
+    20px;
+
+  border:
+    clamp(6px,1vw,11px)
+    solid white;
+
+  border-radius:
+    clamp(30px,5vw,55px);
+
+  background:
+    rgba(255,255,255,.90);
+
+  box-shadow:
+    0 15px 0
+    rgba(91,76,150,.16),
+    0 24px 50px
+    rgba(69,58,119,.18);
+
+  text-align:center;
+
+  animation:
+    amazingFloat
+    2.2s ease-in-out
+    infinite;
+}
+
+
+.amazing-text{
+  margin:0;
+
+  font-size:clamp(
+    60px,
+    13vw,
+    145px
+  );
+
+  line-height:1;
+
+  font-weight:1000;
+
+  letter-spacing:1px;
+
+  color:#6e4db8;
+
+  text-shadow:
+
+    4px 4px 0 #ffffff,
+
+    7px 7px 0
+    rgba(255,181,71,.65);
+}
+
+
+@keyframes amazingFloat{
+
+  0%,
+  100%{
+    transform:
+      translateY(0)
+      rotate(-1deg);
+  }
+
+  50%{
+    transform:
+      translateY(-12px)
+      rotate(1deg);
+  }
+}
+
+
+/* =====================================================
+   COLOURFUL BALL RAIN
+===================================================== */
+
+#ballRain{
+  position:absolute;
+
+  inset:0;
+
+  overflow:hidden;
+
+  pointer-events:none;
+
+  z-index:2;
+}
+
+
+.raining-ball{
+  position:absolute;
+
+  top:-18vh;
+
+  border-radius:50%;
+
+  border:
+    3px solid
+    rgba(255,255,255,.72);
+
+  box-shadow:
+
+    inset
+    -7px
+    -8px
+    0
+    rgba(0,0,0,.08),
+
+    0
+    7px
+    12px
+    rgba(63,56,108,.13);
+
+  animation-name:ballFall;
+
+  animation-timing-function:linear;
+
+  animation-iteration-count:infinite;
+}
+
+
+@keyframes ballFall{
+
+  0%{
+    transform:
+      translateY(-22vh)
+      rotate(0deg);
+  }
+
+  100%{
+    transform:
+      translateY(130vh)
+      rotate(720deg);
+  }
+}
+
+
+/* =====================================================
+   SMALL MOBILE SCREENS
+===================================================== */
+
+@media
+(max-width:600px){
+
+  #questionScreen{
+    padding:
+      8px
+      7px
+      9px;
+  }
+
+  .instruction-box{
+    min-height:64px;
+
+    border-radius:20px;
+
+    padding:
+      8px
+      10px;
+  }
+
+  #instructionText{
+    font-size:
+      clamp(
+        18px,
+        5.4vw,
+        26px
+      );
+  }
+
+  .options-area{
+    gap:9px;
+
+    padding-top:12px;
+  }
+
+  .picture-option{
+    height:
+      min(
+        55vh,
+        440px
+      );
+
+    min-height:190px;
+
+    border-radius:22px;
+
+    padding:7px;
+
+    box-shadow:
+      0 7px 0
+      rgba(87,76,136,.18),
+      0 10px 18px
+      rgba(60,50,100,.15);
+  }
+
+  .picture-option::before{
+    inset:6px;
+
+    border-radius:16px;
+  }
+
+  .picture-option img{
+    border-radius:14px;
+  }
+}
+
+
+/* =====================================================
+   LANDSCAPE MOBILE
+===================================================== */
+
+@media
+(max-height:540px){
+
+  #questionScreen{
+    padding:
+      6px
+      10px;
+  }
+
+  .instruction-box{
+    min-height:50px;
+
+    padding:
+      5px
+      15px;
+
+    border-radius:17px;
+  }
+
+  #instructionText{
+    font-size:
+      clamp(
+        18px,
+        3vw,
+        27px
+      );
+  }
+
+  .options-area{
+    padding-top:8px;
+
+    gap:
+      clamp(
+        12px,
+        3vw,
+        28px
+      );
+  }
+
+  .picture-option{
+    height:
+      min(
+        66vh,
+        360px
+      );
+
+    min-height:150px;
+
+    padding:7px;
+
+    border-radius:21px;
+  }
+
+  .picture-option::before{
+    inset:6px;
+
+    border-radius:15px;
+  }
+
+  #progressDots{
+    height:14px;
+  }
+}
+
+
+/* =====================================================
+   REDUCE ANIMATION WHEN DEVICE REQUESTS IT
+===================================================== */
+
+@media
+(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms !important;
+
+    animation-iteration-count:1 !important;
+
+    scroll-behavior:auto !important;
+  }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ===================================================
+     SLIDE 1 - WHITE LOGO SCREEN
+=================================================== -->
+
+<section
+  id="logoScreen"
+  class="screen active"
+>
+
+  <img
+    src="assets/innovine-logo.png"
+    alt="Innovine Logo"
+  >
+
+</section>
+
+
+<!-- ===================================================
+     QUESTION SLIDES
+=================================================== -->
+
+<section
+  id="questionScreen"
+  class="screen"
+>
+
+  <div class="instruction-box">
+
+    <h1 id="instructionText"></h1>
+
+  </div>
+
+
+  <div class="options-area">
+
+
+    <button
+      id="optionOne"
+      class="picture-option"
+      type="button"
+    >
+
+      <img
+        id="imageOne"
+        src=""
+        alt=""
+        draggable="false"
+      >
+
+    </button>
+
+
+    <button
+      id="optionTwo"
+      class="picture-option"
+      type="button"
+    >
+
+      <img
+        id="imageTwo"
+        src=""
+        alt=""
+        draggable="false"
+      >
+
+    </button>
+
+
+  </div>
+
+
+  <div id="progressDots"></div>
+
+</section>
+
+
+<!-- ===================================================
+     GREEN TICK / RED CROSS
+=================================================== -->
+
+<div
+  id="feedbackSymbol"
+  aria-hidden="true"
+></div>
+
+
+<!-- ===================================================
+     FINAL SLIDE
+=================================================== -->
+
+<section
+  id="endScreen"
+  class="screen"
+>
+
+  <div id="ballRain"></div>
+
+
+  <div class="amazing-card">
+
+    <h1 class="amazing-text">
+      Amazing!
+    </h1>
+
+  </div>
+
+</section>
+
+
+<!-- ===================================================
+     AUDIO FILES
+=================================================== -->
+
+<audio
+  id="clapSound"
+  preload="auto"
+>
+
+  <source
+    src="assets/clap.mp3"
+    type="audio/mpeg"
+  >
+
+</audio>
+
+
+<audio
+  id="wrongSound"
+  preload="auto"
+>
+
+  <source
+    src="assets/wrong.mp3"
+    type="audio/mpeg"
+  >
+
+</audio>
+
+
+<script>
+
+/* =====================================================
+   QUESTION INFORMATION
+
+   All media are loaded only from the assets folder.
+===================================================== */
+
+const questions = [
+
+
+  /* SLIDE 2 */
+
+  {
+
+    instruction:
+    "Identify the crayons inside the box.",
+
+    firstImage:
+    "assets/crayonsin.png",
+
+    secondImage:
+    "assets/crayonsout.png",
+    correctOption:
+    1,
+
+    background:
+    "background-1"
+
+  },
+
+
+  /* SLIDE 3 */
+
+  {
+
+    instruction:
+    "Identify the fruits outside the basket.",
+
+    firstImage:
+    "assets/fruitsin.png",
+
+    secondImage:
+    "assets/fruitsout.png",
+    correctOption:
+    2,
+
+    background:
+    "background-2"
+
+  },
+
+
+  /* SLIDE 4 */
+
+  {
+
+    instruction:
+    "Identify the dog outside the kennel.",
+
+    firstImage:
+    "assets/dogout.png",
+
+    secondImage:
+    "assets/dogin.png",
+    correctOption:
+    1,
+
+    background:
+    "background-3"
+
+  },
+
+
+  /* SLIDE 5 */
+
+  {
+
+    instruction:
+    "Identify the bird inside the nest.",
+
+    firstImage:
+    "assets/birdin.png",
+
+    secondImage:
+    "assets/birdout.png",
+    correctOption:
+    1,
+
+    background:
+    "background-4"
+
+  },
+
+
+  /* SLIDE 6 */
+
+  {
+
+    instruction:
+    "Identify the cookies outside the jar.",
+
+    firstImage:
+    "assets/cookiesout.png",
+
+    secondImage:
+    "assets/cookies in.png",
+    correctOption:
+    1,
+
+    background:
+    "background-5"
+
+  }
+
+];
+
+
+/* =====================================================
+   GAME VARIABLES
+===================================================== */
+
+let currentQuestion = 0;
+
+let answerLocked = false;
+
+let speechRetryUsed = false;
+
+
+/* =====================================================
+   SHUFFLED CORRECT-ANSWER POSITIONS
+
+   The plan keeps the correct image balanced between
+   the left and right sides, then shuffles the positions.
+===================================================== */
+
+let correctPositionPlan = [];
+
+
+let displayedCorrectOption = 1;
+
+
+/* =====================================================
+   PAGE ELEMENTS
+===================================================== */
+
+const logoScreen =
+document.getElementById("logoScreen");
+
+
+const questionScreen =
+document.getElementById("questionScreen");
+
+
+const endScreen =
+document.getElementById("endScreen");
+
+
+const instructionText =
+document.getElementById("instructionText");
+
+
+const optionOne =
+document.getElementById("optionOne");
+
+
+const optionTwo =
+document.getElementById("optionTwo");
+
+
+const imageOne =
+document.getElementById("imageOne");
+
+
+const imageTwo =
+document.getElementById("imageTwo");
+
+
+const feedbackSymbol =
+document.getElementById("feedbackSymbol");
+
+
+const clapSound =
+document.getElementById("clapSound");
+
+
+const wrongSound =
+document.getElementById("wrongSound");
+
+
+const progressDots =
+document.getElementById("progressDots");
+
+
+/* =====================================================
+   PRELOAD ALL PICTURES
+===================================================== */
+
+function preloadPictures(){
+
+  questions.forEach(function(question){
+
+    const pictureOne =
+    new Image();
+
+    pictureOne.src =
+    question.firstImage;
+
+
+    const pictureTwo =
+    new Image();
+
+    pictureTwo.src =
+    question.secondImage;
+
+  });
+
+}
+
+
+preloadPictures();
+
+
+/* =====================================================
+   SHOW A PARTICULAR SCREEN
+===================================================== */
+
+function showScreen(screen){
+
+  logoScreen.classList.remove("active");
+
+  questionScreen.classList.remove("active");
+
+  endScreen.classList.remove("active");
+
+
+  screen.classList.add("active");
+
+}
+
+
+/* =====================================================
+   READ THE INSTRUCTION
+===================================================== */
+
+function readInstruction(text){
+
+  if(
+    !("speechSynthesis" in window)
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    window.speechSynthesis.cancel();
+
+
+    const speech =
+    new SpeechSynthesisUtterance(text);
+
+
+    speech.lang =
+    "en-IN";
+
+
+    speech.rate =
+    0.82;
+
+
+    speech.pitch =
+    1.08;
+
+
+    speech.volume =
+    1;
+
+
+    const availableVoices =
+    window.speechSynthesis.getVoices();
+
+
+    const preferredVoice =
+    availableVoices.find(function(voice){
+
+      return(
+        voice.lang === "en-IN"
+      );
+
+    })
+
+    ||
+
+    availableVoices.find(function(voice){
+
+      return(
+        voice.lang === "en-GB"
+      );
+
+    })
+
+    ||
+
+    availableVoices.find(function(voice){
+
+      return(
+        voice.lang.startsWith("en")
+      );
+
+    });
+
+
+    if(preferredVoice){
+
+      speech.voice =
+      preferredVoice;
+
+    }
+
+
+    window.speechSynthesis.speak(
+      speech
+    );
+
+  }
+
+  catch(error){
+
+    console.log(
+      "Speech could not start.",
+      error
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   IOS / MOBILE SPEECH SUPPORT
+
+   Some mobile browsers permit speech only after
+   the first touch. The game retries the instruction
+   once after the learner's first interaction.
+===================================================== */
+
+function retrySpeechAfterFirstTouch(){
+
+  if(speechRetryUsed){
+
+    return;
+
+  }
+
+
+  speechRetryUsed =
+  true;
+
+
+  const currentData =
+  questions[currentQuestion];
+
+
+  if(currentData){
+
+    readInstruction(
+      currentData.instruction
+    );
+
+  }
+
+}
+
+
+document.addEventListener(
+
+  "touchstart",
+
+  retrySpeechAfterFirstTouch,
+
+  {
+
+    once:true,
+
+    passive:true
+
+  }
+
+);
+
+
+/* =====================================================
+   CREATE PROGRESS DOTS
+===================================================== */
+
+function updateProgressDots(){
+
+  progressDots.innerHTML =
+  "";
+
+
+  questions.forEach(
+
+    function(question,index){
+
+      const dot =
+      document.createElement("span");
+
+
+      dot.className =
+      "progress-dot";
+
+
+      if(
+        index === currentQuestion
+      ){
+
+        dot.classList.add(
+          "current"
+        );
+
+      }
+
+
+      progressDots.appendChild(
+        dot
+      );
+
+    }
+
+  );
+
+}
+
+
+/* =====================================================
+   CREATE A BALANCED SHUFFLE PLAN
+
+   This guarantees that the correct answer does not
+   keep appearing on the same side. For an odd number
+   of questions, the extra position is chosen randomly.
+===================================================== */
+
+function createCorrectPositionPlan(){
+
+  const positions = [];
+
+
+  const leftCount =
+  Math.floor(
+    questions.length / 2
+  );
+
+
+  const rightCount =
+  Math.floor(
+    questions.length / 2
+  );
+
+
+  for(
+    let index = 0;
+    index < leftCount;
+    index++
+  ){
+
+    positions.push(1);
+
+  }
+
+
+  for(
+    let index = 0;
+    index < rightCount;
+    index++
+  ){
+
+    positions.push(2);
+
+  }
+
+
+  if(
+    questions.length % 2 !== 0
+  ){
+
+    positions.push(
+      Math.random() < 0.5
+      ? 1
+      : 2
+    );
+
+  }
+
+
+  for(
+    let index = positions.length - 1;
+    index > 0;
+    index--
+  ){
+
+    const randomIndex =
+    Math.floor(
+      Math.random() *
+      (index + 1)
+    );
+
+
+    const temporaryValue =
+    positions[index];
+
+
+    positions[index] =
+    positions[randomIndex];
+
+
+    positions[randomIndex] =
+    temporaryValue;
+
+  }
+
+
+  correctPositionPlan =
+  positions;
+
+}
+
+
+/* =====================================================
+   LOAD QUESTION
+===================================================== */
+
+function loadQuestion(){
+
+  answerLocked =
+  false;
+
+
+  feedbackSymbol.className =
+  "";
+
+
+  feedbackSymbol.style.display =
+  "none";
+
+
+  optionOne.className =
+  "picture-option";
+
+
+  optionTwo.className =
+  "picture-option";
+
+
+  const question =
+  questions[currentQuestion];
+
+
+  questionScreen.className =
+  "screen active " +
+  question.background;
+
+
+  instructionText.textContent =
+  question.instruction;
+
+
+  /* -------------------------------------------------
+     SHUFFLE THE TWO IMAGES
+
+     The correct image is placed according to the
+     balanced random position created for this round.
+  ------------------------------------------------- */
+
+  const desiredCorrectPosition =
+  correctPositionPlan[
+    currentQuestion
+  ];
+
+
+  const shouldSwap =
+
+  question.correctOption !==
+  desiredCorrectPosition;
+
+
+  if(shouldSwap){
+
+    imageOne.src =
+    question.secondImage;
+
+
+    imageTwo.src =
+    question.firstImage;
+
+  }
+
+  else{
+
+    imageOne.src =
+    question.firstImage;
+
+
+    imageTwo.src =
+    question.secondImage;
+
+  }
+
+
+  displayedCorrectOption =
+  desiredCorrectPosition;
+
+
+  /* No image labels are displayed or stored. */
+
+  imageOne.alt =
+  "";
+
+
+  imageTwo.alt =
+  "";
+
+
+  updateProgressDots();
+
+
+  setTimeout(
+
+    function(){
+
+      readInstruction(
+        question.instruction
+      );
+
+    },
+
+    450
+
+  );
+
+}
+
+
+/* =====================================================
+   PLAY AN AUDIO FILE
+===================================================== */
+
+function playAudio(audio){
+
+  try{
+
+    audio.pause();
+
+
+    audio.currentTime =
+    0;
+
+
+    const playPromise =
+    audio.play();
+
+
+    if(
+
+      playPromise !== undefined
+
+    ){
+
+      playPromise.catch(
+
+        function(){
+
+          /* Audio remains optional if browser blocks it */
+
+        }
+
+      );
+
+    }
+
+  }
+
+  catch(error){
+
+    console.log(
+      "Audio could not play.",
+      error
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   SHOW GREEN TICK OR RED CROSS
+===================================================== */
+
+function showFeedback(type){
+
+  feedbackSymbol.style.display =
+  "none";
+
+
+  feedbackSymbol.offsetHeight;
+
+
+  if(
+    type === "correct"
+  ){
+
+    feedbackSymbol.textContent =
+    "✓";
+
+
+    feedbackSymbol.className =
+    "correct show";
+
+  }
+
+  else{
+
+    feedbackSymbol.textContent =
+    "×";
+
+
+    feedbackSymbol.className =
+    "wrong show";
+
+  }
+
+}
+
+
+/* =====================================================
+   CHECK THE LEARNER'S ANSWER
+===================================================== */
+
+function checkAnswer(
+
+  selectedOption,
+
+  selectedButton
+
+){
+
+  if(answerLocked){
+
+    return;
+
+  }
+
+
+  const question =
+  questions[currentQuestion];
+
+
+  /* ---------------- CORRECT ANSWER ---------------- */
+
+  if(
+
+    selectedOption ===
+    displayedCorrectOption
+
+  ){
+
+    answerLocked =
+    true;
+
+
+    optionOne.classList.add(
+      "disabled"
+    );
+
+
+    optionTwo.classList.add(
+      "disabled"
+    );
+
+
+    selectedButton.classList.add(
+      "correct-choice"
+    );
+
+
+    showFeedback(
+      "correct"
+    );
+
+
+    playAudio(
+      clapSound
+    );
+
+
+    setTimeout(
+
+      function(){
+
+        feedbackSymbol.className =
+        "";
+
+
+        feedbackSymbol.style.display =
+        "none";
+
+
+        currentQuestion++;
+
+
+        if(
+
+          currentQuestion <
+          questions.length
+
+        ){
+
+          loadQuestion();
+
+        }
+
+        else{
+
+          showFinalScreen();
+
+        }
+
+      },
+
+      1700
+
+    );
+
+  }
+
+
+  /* ---------------- WRONG ANSWER ---------------- */
+
+  else{
+
+    answerLocked =
+    true;
+
+
+    selectedButton.classList.add(
+      "wrong-choice"
+    );
+
+
+    showFeedback(
+      "wrong"
+    );
+
+
+    playAudio(
+      wrongSound
+    );
+
+
+    setTimeout(
+
+      function(){
+
+        feedbackSymbol.className =
+        "";
+
+
+        feedbackSymbol.style.display =
+        "none";
+
+
+        selectedButton.classList.remove(
+          "wrong-choice"
+        );
+
+
+        answerLocked =
+        false;
+
+      },
+
+      1000
+
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   OPTION CLICKS
+===================================================== */
+
+optionOne.addEventListener(
+
+  "click",
+
+  function(){
+
+    checkAnswer(
+      1,
+      optionOne
+    );
+
+  }
+
+);
+
+
+optionTwo.addEventListener(
+
+  "click",
+
+  function(){
+
+    checkAnswer(
+      2,
+      optionTwo
+    );
+
+  }
+
+);
+
+
+/* =====================================================
+   CREATE COLOURFUL BALL RAIN
+===================================================== */
+
+function createBallRain(){
+
+  const ballRain =
+  document.getElementById(
+    "ballRain"
+  );
+
+
+  ballRain.innerHTML =
+  "";
+
+
+  const colours = [
+
+    "#ff5e91",
+
+    "#ff9838",
+
+    "#ffd23f",
+
+    "#48cf9c",
+
+    "#42b9f5",
+
+    "#8d75ee",
+
+    "#ea68d2",
+
+    "#ff7b64"
+
+  ];
+
+
+  for(
+
+    let ballNumber = 0;
+
+    ballNumber < 48;
+
+    ballNumber++
+
+  ){
+
+    const ball =
+    document.createElement(
+      "span"
+    );
+
+
+    ball.className =
+    "raining-ball";
+
+
+    const ballSize =
+
+    Math.floor(
+
+      Math.random() *
+      34
+
+    )
+
+    + 20;
+
+
+    const horizontalPosition =
+
+    Math.random() *
+    100;
+
+
+    const animationDuration =
+
+    Math.random() *
+    3.4
+
+    + 3.1;
+
+
+    const animationDelay =
+
+    Math.random() *
+    -7;
+
+
+    const colour =
+
+    colours[
+
+      Math.floor(
+
+        Math.random() *
+        colours.length
+
+      )
+
+    ];
+
+
+    ball.style.width =
+    ballSize + "px";
+
+
+    ball.style.height =
+    ballSize + "px";
+
+
+    ball.style.left =
+    horizontalPosition + "%";
+
+
+    ball.style.background =
+    colour;
+
+
+    ball.style.animationDuration =
+    animationDuration + "s";
+
+
+    ball.style.animationDelay =
+    animationDelay + "s";
+
+
+    ballRain.appendChild(
+      ball
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   FINAL SCREEN
+===================================================== */
+
+function showFinalScreen(){
+
+  if(
+
+    "speechSynthesis" in window
+
+  ){
+
+    window.speechSynthesis.cancel();
+
+  }
+
+
+  showScreen(
+    endScreen
+  );
+
+
+  createBallRain();
+
+
+  setTimeout(
+
+    function(){
+
+      readInstruction(
+        "Amazing!"
+      );
+
+    },
+
+    400
+
+  );
+
+}
+
+
+/* =====================================================
+   START AUTOMATICALLY
+
+   The Innovine logo remains visible for 5 seconds.
+   No Start button is used.
+===================================================== */
+
+window.addEventListener(
+
+  "load",
+
+  function(){
+
+    setTimeout(
+
+      function(){
+
+        currentQuestion =
+        0;
+
+
+        createCorrectPositionPlan();
+
+
+        showScreen(
+          questionScreen
+        );
+
+
+        loadQuestion();
+
+      },
+
+      5000
+
+    );
+
+  }
+
+);
+
+
+/* =====================================================
+   PREVENT UNWANTED PAGE MOVEMENT
+===================================================== */
+
+document.addEventListener(
+
+  "touchmove",
+
+  function(event){
+
+    event.preventDefault();
+
+  },
+
+  {
+
+    passive:false
+
+  }
+
+);
+
+</script>
+
+</body>
+</html>
